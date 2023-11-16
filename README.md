@@ -1,6 +1,6 @@
 # GEPT Postos
 
-A new Flutter project.
+Lista com os dados das cestas de natal 
 
 ## Getting Started
 
