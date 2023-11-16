@@ -26,7 +26,6 @@ jobs:
 
       - name: Deploy
         run: |
-          git config --global init.defaultBranch main
           cd build/web
           git init
           git config --global user.email josuemorais@gmail.com

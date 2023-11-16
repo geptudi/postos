@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animations/models/product.dart';
+import '/models/product.dart';
 
 class ExpansionPage extends StatefulWidget {
   const ExpansionPage({Key? key}) : super(key: key);

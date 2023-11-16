@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animations/pages/expansion_page.dart';
+import '/pages/expansion_page.dart';
 
 void main() {
   runApp(const MyApp());
