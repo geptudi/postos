@@ -29,8 +29,8 @@ jobs:
           git config --global init.defaultBranch main
           cd build/web
           git init
-          git config --global user.email paulodetarso.udi@gmail.com
-          git config --global user.name geptudi
+          git config --global user.email josuemorais@gmail.com
+          git config --global user.name josuemoraisgh
           git status
           git remote add origin https://${{secrets.token}}@github.com/geptudi/postos.git
           git checkout -b gh-pages
