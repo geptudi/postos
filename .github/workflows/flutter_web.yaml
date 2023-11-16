@@ -22,7 +22,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Web
-        run: flutter build web --release --base-href=/doacoes/
+        run: flutter build web --release --base-href=/postos/
 
       - name: Deploy
         run: |
@@ -32,7 +32,7 @@ jobs:
           git config --global user.email paulodetarso.udi@gmail.com
           git config --global user.name geptudi
           git status
-          git remote add origin https://${{secrets.token}}@github.com/geptudi/doacoes.git
+          git remote add origin https://${{secrets.token}}@github.com/geptudi/postos.git
           git checkout -b gh-pages
           git add --all
           git commit -m "update"
