@@ -19,12 +19,12 @@ jobs:
           channel: "stable"
 
       - name: Install dependencies
-        run: |
-           git config --global init.defaultBranch main
-           flutter pub get
+        run: flutter pub get
 
       - name: Build Web
-        run: flutter build web --release --base-href=/postos/
+        run: |
+          git config --global init.defaultBranch main
+          flutter build web --release --base-href=/postos/
 
       - name: Deploy
         run: |
