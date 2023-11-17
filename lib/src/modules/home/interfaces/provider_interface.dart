@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart' as http;
 
-class ProviderInterface extends  Disposable {
+class ProviderInterface extends Disposable {
   var client = http.Client();
   Future<Map<String, dynamic>?> get(String baseUrl,
       {String bodyUrl = "", Map<String, dynamic>? queryParameters}) async {

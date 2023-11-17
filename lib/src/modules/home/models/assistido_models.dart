@@ -1,54 +1,26 @@
-import 'package:hive_flutter/hive_flutter.dart';
-part 'assistido_models.g.dart';
-
-@HiveType(typeId: 0, adapterName: 'AssistidoAdapter')
-class Assistido extends HiveObject {
-  @HiveField(0)
+class Assistido {
   int ident;
-  @HiveField(1)
   String updatedApps;
-  @HiveField(2)
   String photoName;
-  @HiveField(3)
   String nomeM1;
-  @HiveField(4)
   String condicao;
-  @HiveField(5)
   String dataNascM1;
-  @HiveField(6)
   String estadoCivil;
-  @HiveField(7)
   dynamic fone;
-  @HiveField(8)
   dynamic rg;
-  @HiveField(9)
   dynamic cpf;
-  @HiveField(10)
   String logradouro;
-  @HiveField(11)
   String endereco;
-  @HiveField(12)
   dynamic numero;
-  @HiveField(13)
   String bairro;
-  @HiveField(14)
   String complemento;
-  @HiveField(15)
   dynamic cep;
-  @HiveField(16)
   String obs;
-  @HiveField(17)
   String chamada;
-  @HiveField(18)
   String parentescos;
-  @HiveField(19)
   String nomesMoradores;
-  @HiveField(20)
   String datasNasc;
-  @HiveField(21)
-  List<int> photoIntList;
-  @HiveField(22)
-  List<double> fotoPoints;
+  bool isExpanded;
 
   Assistido({
     this.ident = -1,
@@ -72,8 +44,7 @@ class Assistido extends HiveObject {
     this.parentescos = "",
     this.nomesMoradores = "",
     this.datasNasc = "",
-    this.photoIntList = const [],
-    this.fotoPoints = const [],
+    this.isExpanded = false,
   });
 
   Assistido.assistido(Assistido assistido)
@@ -98,8 +69,7 @@ class Assistido extends HiveObject {
         parentescos = assistido.parentescos,
         nomesMoradores = assistido.nomesMoradores,
         datasNasc = assistido.datasNasc,
-        photoIntList = assistido.photoIntList,
-        fotoPoints = assistido.fotoPoints;
+        isExpanded = assistido.isExpanded;
 
   factory Assistido.fromList(List<dynamic> value) {
     return Assistido(
@@ -124,8 +94,7 @@ class Assistido extends HiveObject {
       parentescos: value[18].toString(),
       nomesMoradores: value[19].toString(),
       datasNasc: value[20].toString(),
-      photoIntList: const [],
-      fotoPoints: const [],
+      isExpanded: false,
     );
   }
 
