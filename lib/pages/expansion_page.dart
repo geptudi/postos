@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import '/models/product.dart';
 
 class ExpansionPage extends StatefulWidget {
@@ -15,35 +16,9 @@ class _ExpansionPageState extends State<ExpansionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(children: <Widget>[
-          const Text('Posto: '),
-          DropdownButton<String>(
-            dropdownColor: Theme.of(context).colorScheme.background,
-            items: const <DropdownMenuItem<String>>[
-              DropdownMenuItem<String>(
-                value: "Eurípedes Barsanulfo (Morada Nova)",
-                child: Text("Eurípedes Barsanulfo (Morada Nova)"),
-              ),
-              DropdownMenuItem<String>(
-                value: "Simão Pedro (São Francisco)",
-                child: Text("Simão Pedro (São Francisco)"),
-              ),
-              DropdownMenuItem<String>(
-                value: "Mãe Zeferina (Taiaman)",
-                child: Text("Mãe Zeferina (Taiaman)"),
-              ), 
-              DropdownMenuItem<String>(
-                value: "Bezerra de Menezes (Pacaembu)",
-                child: Text("Mãe Zeferina (Pacaembu)"),
-              ),                                           
-            ],
-            onChanged: (String? novoItemSelecionado) {
-              if (novoItemSelecionado != null) {}
-            },
-            value: "Eurípedes Barsanulfo (Morada Nova)",
-          ),
-        ]),
+        title: const Text('Posto: '),
       ),
+      floatingActionButton: customFloatingActionButton(context),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -81,3 +56,49 @@ class _ExpansionPageState extends State<ExpansionPage> {
     );
   }
 }
+
+Widget customFloatingActionButton(BuildContext context) => SpeedDial(
+      animatedIcon: AnimatedIcons.menu_close,
+      animatedIconTheme: const IconThemeData(size: 22.0),
+      visible: true,
+      closeManually: false,
+      curve: Curves.bounceIn,
+      overlayColor: Colors.black,
+      overlayOpacity: 0.5,
+      tooltip: 'Opções',
+      heroTag: 'Seleciona Opções Diversas',
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+      elevation: 8.0,
+      shape: const CircleBorder(),
+      children: [
+        SpeedDialChild(
+          child: const Icon(Icons.collections),
+          backgroundColor: Colors.red,
+          label: 'Bezerra de Menezes (Pacaembu)',
+          labelStyle: const TextStyle(fontSize: 18.0),
+          onTap: () {},
+        ),
+        SpeedDialChild(
+            child: const Icon(Icons.add_box),
+            backgroundColor: Colors.blue,
+            label: 'Eurípedes Barsanulfo (Morada Nova)',
+            labelStyle: const TextStyle(fontSize: 18.0),
+            onTap: () {}),
+        SpeedDialChild(
+            child: const Icon(Icons.assignment_returned),
+            backgroundColor: Colors.green,
+            label: 'Mãe Zeferina (Taiaman)',
+            labelStyle: const TextStyle(fontSize: 18.0),
+            onTap: () {}),
+        SpeedDialChild(
+          child: const Icon(
+            Icons.search,
+          ),
+          backgroundColor: Colors.yellow,
+          label: 'Simão Pedro (São Francisco)',
+          labelStyle: const TextStyle(fontSize: 18.0),
+          onTap: () {},
+        ),
+      ],
+    );
