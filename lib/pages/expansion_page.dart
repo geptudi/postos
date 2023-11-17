@@ -16,7 +16,8 @@ class _ExpansionPageState extends State<ExpansionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Posto: '),
+        leading: customFloatingActionButton(context),
+        title: const Text('Cestas Natalinas OSGETP'),
       ),
       floatingActionButton: customFloatingActionButton(context),
       body: SingleChildScrollView(
