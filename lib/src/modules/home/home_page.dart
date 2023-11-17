@@ -24,7 +24,6 @@ class _HomePageState extends State<HomePage> {
         activeTagButtom: controller.activeTagButtom,
         listaTelas: controller.listaTelas,
       ),
-      floatingActionButton: customFloatingActionButton(context),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -62,49 +61,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-Widget customFloatingActionButton(BuildContext context) => SpeedDial(
-      animatedIcon: AnimatedIcons.menu_close,
-      animatedIconTheme: const IconThemeData(size: 22.0),
-      visible: true,
-      closeManually: false,
-      curve: Curves.bounceIn,
-      overlayColor: Colors.black,
-      overlayOpacity: 0.5,
-      tooltip: 'Opções',
-      heroTag: 'Seleciona Opções Diversas',
-      backgroundColor: Colors.white,
-      foregroundColor: Colors.black,
-      elevation: 8.0,
-      shape: const CircleBorder(),
-      children: [
-        SpeedDialChild(
-          child: const Icon(Icons.collections),
-          backgroundColor: Colors.red,
-          label: 'Bezerra de Menezes (Pacaembu)',
-          labelStyle: const TextStyle(fontSize: 18.0),
-          onTap: () {},
-        ),
-        SpeedDialChild(
-            child: const Icon(Icons.add_box),
-            backgroundColor: Colors.blue,
-            label: 'Eurípedes Barsanulfo (Morada Nova)',
-            labelStyle: const TextStyle(fontSize: 18.0),
-            onTap: () {}),
-        SpeedDialChild(
-            child: const Icon(Icons.assignment_returned),
-            backgroundColor: Colors.green,
-            label: 'Mãe Zeferina (Taiaman)',
-            labelStyle: const TextStyle(fontSize: 18.0),
-            onTap: () {}),
-        SpeedDialChild(
-          child: const Icon(
-            Icons.search,
-          ),
-          backgroundColor: Colors.yellow,
-          label: 'Simão Pedro (São Francisco)',
-          labelStyle: const TextStyle(fontSize: 18.0),
-          onTap: () {},
-        ),
-      ],
-    );
