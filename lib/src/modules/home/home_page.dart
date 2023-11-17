@@ -15,89 +15,106 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final controller = Modular.get<HomeController>();
+  late Future<bool> initedState;
+  List<Assistido> assistidoList = [];
+
+  @override
+  void initState() {
+    initedState = controller.init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: controller.activeTagButtom,
-      builder: (BuildContext context, String activeTag, Widget? child) =>
-          FutureBuilder<bool>(
-        future: controller.sync(),
-        builder: (BuildContext context, AsyncSnapshot<bool> isInited) {
-          return isInited.hasData
-              ? StreamBuilder<List<Assistido>>(
-                  initialData: const <Assistido>[],
-                  stream: controller.stream,
-                  builder: (BuildContext context,
-                          AsyncSnapshot<List<Assistido>> assistidoList) =>
-                      Scaffold(
-                    appBar: AppBar(
-                      title: Text('Cestas Natalinas do Posto $activeTag'),
-                      actions: <Widget>[
-                        RxBuilder(
-                          builder: (BuildContext context) => IconBadge(
-                            icon: const Icon(Icons.sync),
-                            itemCount: assistidoList.data!.length,
-                            badgeColor: Colors.red,
-                            itemColor: Colors.white,
-                            maxCount: 99,
-                            hideZero: true,
-                            onTap: () async {
-                              setState(() {});
-                            },
+    return FutureBuilder<bool>(
+      future: initedState,
+      builder: (BuildContext context, AsyncSnapshot<bool> isInited) =>
+          ValueListenableBuilder(
+        valueListenable: controller.activeTagButtom,
+        builder: (BuildContext context, String activeTag, Widget? child) =>
+            isInited.hasData
+                ? FutureBuilder<List<dynamic>?>(
+                    initialData: const <Assistido>[],
+                    future: controller.assistidosStoreList
+                        .getChanges(table: activeTag),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<dynamic>?> response) {
+                      if (response.data != null) {
+                        if ((response as List).isNotEmpty) {
+                          assistidoList = response.data!
+                              .map((e) => Assistido.fromList(e))
+                              .toList();
+                        }
+                      }
+                      return Scaffold(
+                        appBar: AppBar(
+                          title: Text('Cestas Natalinas do Posto $activeTag'),
+                          actions: <Widget>[
+                            RxBuilder(
+                              builder: (BuildContext context) => IconBadge(
+                                icon: const Icon(Icons.sync),
+                                itemCount: assistidoList.length,
+                                badgeColor: Colors.red,
+                                itemColor: Colors.white,
+                                maxCount: 99,
+                                hideZero: true,
+                                onTap: () async {
+                                  setState(() {});
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        drawer: HomeBuildTagPage(
+                          activeTagButtom: controller.activeTagButtom,
+                        ),
+                        body: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: ExpansionPanelList.radio(
+                              expansionCallback: (int index, bool isExpanded) {
+                                setState(() => assistidoList[index].isExpanded =
+                                    !isExpanded);
+                              },
+                              children: assistidoList
+                                  .map<ExpansionPanel>((Assistido product) {
+                                return ExpansionPanelRadio(
+                                  // isExpanded: product.isExpanded,
+                                  value: product.ident,
+                                  canTapOnHeader: true,
+                                  headerBuilder:
+                                      (BuildContext context, bool isExpanded) {
+                                    return ListTile(
+                                      leading: CircleAvatar(
+                                          child:
+                                              Text(product.ident.toString())),
+                                      title: Text(product.nomeM1),
+                                    );
+                                  },
+                                  body: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 12.0),
+                                        child: Text(product.nomesMoradores),
+                                      ),
+                                      Image.network(
+                                          'https://picsum.photos/id/${product.ident}/500/300'),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                    drawer: HomeBuildTagPage(
-                      activeTagButtom: controller.activeTagButtom,
-                    ),
-                    body: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: ExpansionPanelList.radio(
-                          expansionCallback: (int index, bool isExpanded) {
-                            setState(() => assistidoList
-                                .data![index].isExpanded = !isExpanded);
-                          },
-                          children: assistidoList.data!
-                              .map<ExpansionPanel>((Assistido product) {
-                            return ExpansionPanelRadio(
-                              // isExpanded: product.isExpanded,
-                              value: product.ident,
-                              canTapOnHeader: true,
-                              headerBuilder:
-                                  (BuildContext context, bool isExpanded) {
-                                return ListTile(
-                                  leading: CircleAvatar(
-                                      child: Text(
-                                          product.ident.toString())),
-                                  title: Text(product.nomeM1),
-                                );
-                              },
-                              body: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 12.0),
-                                    child: Text(product.nomesMoradores),
-                                  ),
-                                  Image.network(
-                                      'https://picsum.photos/id/${product.ident}/500/300'),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ),
+                      );
+                    },
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
                   ),
-                )
-              : const Center(
-                  child: CircularProgressIndicator(),
-                );
-        },
       ),
     );
   }
