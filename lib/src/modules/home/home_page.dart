@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import '../../models/product.dart';
 import 'home_build_tag_page.dart';
 import 'home_controller.dart';
@@ -19,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Cestas Natalinas OSGETP')),
+      appBar: AppBar(title: const Text('Cestas Natalinas OSGEPT')),
       drawer: HomeBuildTagPage(
         activeTagButtom: controller.activeTagButtom,
         listaTelas: controller.listaTelas,

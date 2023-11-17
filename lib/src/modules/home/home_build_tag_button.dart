@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-
 class BuildTagButton extends StatelessWidget {
   final ValueNotifier<List<Map<String, dynamic>>> listaTelas;
   final ValueNotifier<String> activeTagButtom;
-  final String tag;
+  final List<String> tag;
   final Icon icon;
   const BuildTagButton(
       {Key? key,
@@ -17,7 +16,7 @@ class BuildTagButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color =
-        tag == activeTagButtom.value ? Colors.purple : Colors.black26;
+        tag[0] == activeTagButtom.value ? Colors.purple : Colors.black26;
     return SizedBox(
         width: 300,
         child: TextButton(
@@ -33,11 +32,24 @@ class BuildTagButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               icon,
-              Text('    $tag'),
+              Container(
+                margin: const EdgeInsets.only(
+                  left: 10.0,
+                  top: 0.0,
+                  bottom: 0.0,
+                  right: 00.0,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: tag.map((e) => Text(e)).toList(),
+                ),
+              ),
             ],
           ),
           onPressed: () {
-            activeTagButtom.value = tag;
+            activeTagButtom.value = tag[0];
           },
         ));
   }

@@ -55,7 +55,7 @@ class HomeBuildTagPage extends StatelessWidget {
                 BuildTagButton(
                   listaTelas: listaTelas,
                   activeTagButtom: activeTagButtom,
-                  tag: 'Bezerra de Menezes (Pacaembu)',
+                  tag: const ['Bezerra de Menezes','Bairro: Pacaembu'],
                   icon: const Icon(Icons.travel_explore),
                 ),
                 const SizedBox(
@@ -64,7 +64,7 @@ class HomeBuildTagPage extends StatelessWidget {
                 BuildTagButton(
                   listaTelas: listaTelas,
                   activeTagButtom: activeTagButtom,
-                  tag: 'Eurípedes Barsanulfo (Morada Nova)',
+                  tag: const ['Eurípedes Barsanulfo','Bairro: Morada Nova'],
                   icon: const Icon(Icons.people),
                 ),
                 const SizedBox(
@@ -73,7 +73,7 @@ class HomeBuildTagPage extends StatelessWidget {
                 BuildTagButton(
                   listaTelas: listaTelas,
                   activeTagButtom: activeTagButtom,
-                  tag: 'Mãe Zeferina (Taiaman)',
+                  tag: const ['Mãe Zeferina','Bairro: Taiaman'],
                   icon: const Icon(Icons.login),
                 ),
                 const SizedBox(
@@ -82,7 +82,7 @@ class HomeBuildTagPage extends StatelessWidget {
                 BuildTagButton(
                   listaTelas: listaTelas,
                   activeTagButtom: activeTagButtom,
-                  tag: 'Simão Pedro (São Francisco)',
+                  tag: const ['Simão Pedro','Bairro: São Francisco'],
                   icon: const Icon(Icons.settings),
                 ),
                 const SizedBox(
@@ -91,7 +91,7 @@ class HomeBuildTagPage extends StatelessWidget {
                 BuildTagButton(
                   listaTelas: listaTelas,
                   activeTagButtom: activeTagButtom,
-                  tag: 'Informações',
+                  tag: const ['Informações'],
                   icon: const Icon(Icons.info),
                 ),
                 const Spacer(),
