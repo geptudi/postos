@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import '../../../modules/home/home_controller.dart';
 import '../../models/product.dart';
 import 'home_build_tag_page.dart';
+import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Cestas Natalinas OSGETP')),
-      drawer: BuildTagPage(
+      drawer: HomeBuildTagPage(
         activeTagButtom: controller.activeTagButtom,
         listaTelas: controller.listaTelas,
       ),

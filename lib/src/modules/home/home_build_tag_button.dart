@@ -19,7 +19,7 @@ class BuildTagButton extends StatelessWidget {
     final Color color =
         tag == activeTagButtom.value ? Colors.purple : Colors.black26;
     return SizedBox(
-        width: 200,
+        width: 300,
         child: TextButton(
           style: TextButton.styleFrom(
             foregroundColor: color,
