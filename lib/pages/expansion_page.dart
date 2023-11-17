@@ -9,7 +9,7 @@ class ExpansionPage extends StatefulWidget {
 }
 
 class _ExpansionPageState extends State<ExpansionPage> {
-  final List<Product> _products = Product.generateItems(8);
+  final List<Product> _products = Product.generateItems(18);
 
   @override
   Widget build(BuildContext context) {
