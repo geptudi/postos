@@ -31,7 +31,7 @@ class BuildTagPage extends StatelessWidget {
                       strokeWidth: 1.0,
                       strokeColor: Colors.blueAccent,
                       child: const Text(
-                        'Posto de Assistência',
+                        'Postos de Assistência',
                         style: TextStyle(
                             fontSize: 40,
                             color: Colors.black,
@@ -41,7 +41,7 @@ class BuildTagPage extends StatelessWidget {
                       strokeWidth: 1.0,
                       strokeColor: Colors.blueAccent,
                       child: const Text(
-                        'Eurípedes Barsanulfo',
+                        'Espírita',
                         style: TextStyle(
                             fontSize: 30,
                             color: Colors.redAccent,
@@ -50,23 +50,23 @@ class BuildTagPage extends StatelessWidget {
                   BuildTagButton(
                     listaTelas: listaTelas,
                     activeTagButtom: activeTagButtom,
-                    tag: 'Assistidos',
+                    tag: 'Bezerra de Menezes (Pacaembu)',
                     icon: const Icon(Icons.travel_explore),
                   ),
                   BuildTagButton(
                       listaTelas: listaTelas,
                       activeTagButtom: activeTagButtom,
-                      tag: 'Colaboradores',
+                      tag: 'Eurípedes Barsanulfo (Morada Nova)',
                       icon: const Icon(Icons.people)),
                   BuildTagButton(
                       listaTelas: listaTelas,
                       activeTagButtom: activeTagButtom,
-                      tag: 'LogIn',
+                      tag: 'Mãe Zeferina (Taiaman)',
                       icon: const Icon(Icons.login)),
                   BuildTagButton(
                       listaTelas: listaTelas,
                       activeTagButtom: activeTagButtom,
-                      tag: 'Configurações',
+                      tag: 'Simão Pedro (São Francisco)',
                       icon: const Icon(Icons.settings)),
                   BuildTagButton(
                       listaTelas: listaTelas,

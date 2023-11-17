@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import '/models/product.dart';
+import '../../src/models/product.dart';
+import 'home_build_tag_page.dart';
+import 'home_controller.dart';
 
-class ExpansionPage extends StatefulWidget {
-  const ExpansionPage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<ExpansionPage> createState() => _ExpansionPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _ExpansionPageState extends State<ExpansionPage> {
+class _HomePageState extends State<HomePage> {
+  final controller = Modular.get<HomeController>();
   final List<Product> _products = Product.generateItems(18);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: const Icon(
-              Icons.dehaze_sharp,
-              color: Colors.black,
-            ),
-            onPressed: () {}),
-        title: const Text('Cestas Natalinas OSGETP'),
+      appBar: AppBar(title: const Text('Cestas Natalinas OSGETP')),
+      drawer: BuildTagPage(
+        activeTagButtom: controller.activeTagButtom,
+        listaTelas: controller.listaTelas,
       ),
       floatingActionButton: customFloatingActionButton(context),
       body: SingleChildScrollView(
