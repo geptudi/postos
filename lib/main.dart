@@ -10,14 +10,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'GEPT - Postos de Assistência',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        // brightness: Brightness.dark,
-      ),
-      home: const ExpansionPage(),
+      home: ExpansionPage(),
     );
   }
 }
