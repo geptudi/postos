@@ -14,7 +14,28 @@ class _ExpansionPageState extends State<ExpansionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Produtos')),
+      appBar: AppBar(
+        title: Row(children: <Widget>[
+          const Text('Posto: '),
+          DropdownButton<String>(
+            dropdownColor: Theme.of(context).colorScheme.background,
+            style: const TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+                decorationColor: Colors.black),
+            items: const <DropdownMenuItem<String>>[
+              DropdownMenuItem<String>(
+                value: "Eurípedes Barsanulfo (Morada Nova)",
+                child: Text("Eurípedes Barsanulfo (Morada Nova)"),
+              ),
+            ],
+            onChanged: (String? novoItemSelecionado) {
+              if (novoItemSelecionado != null) {}
+            },
+            value: "Eurípedes Barsanulfo (Morada Nova)",
+          ),
+        ]),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -40,7 +61,8 @@ class _ExpansionPageState extends State<ExpansionPage> {
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: Text(product.description),
                     ),
-                    Image.network('https://picsum.photos/id/${product.id}/500/300'),
+                    Image.network(
+                        'https://picsum.photos/id/${product.id}/500/300'),
                   ],
                 ),
               );
