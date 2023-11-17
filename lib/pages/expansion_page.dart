@@ -19,15 +19,23 @@ class _ExpansionPageState extends State<ExpansionPage> {
           const Text('Posto: '),
           DropdownButton<String>(
             dropdownColor: Theme.of(context).colorScheme.background,
-            style: const TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-                decorationColor: Colors.black),
             items: const <DropdownMenuItem<String>>[
               DropdownMenuItem<String>(
                 value: "Eurípedes Barsanulfo (Morada Nova)",
                 child: Text("Eurípedes Barsanulfo (Morada Nova)"),
               ),
+              DropdownMenuItem<String>(
+                value: "Simão Pedro (São Francisco)",
+                child: Text("Simão Pedro (São Francisco)"),
+              ),
+              DropdownMenuItem<String>(
+                value: "Mãe Zeferina (Taiaman)",
+                child: Text("Mãe Zeferina (Taiaman)"),
+              ), 
+              DropdownMenuItem<String>(
+                value: "Bezerra de Menezes (Pacaembu)",
+                child: Text("Mãe Zeferina (Pacaembu)"),
+              ),                                           
             ],
             onChanged: (String? novoItemSelecionado) {
               if (novoItemSelecionado != null) {}
