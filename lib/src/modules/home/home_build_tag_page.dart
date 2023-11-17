@@ -1,12 +1,12 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'home_build_tag_button.dart';
 
 class HomeBuildTagPage extends StatelessWidget {
-  final ValueNotifier<List<Map<String, dynamic>>> listaTelas;
   final ValueNotifier<String> activeTagButtom;
   const HomeBuildTagPage(
-      {Key? key, required this.activeTagButtom, required this.listaTelas})
+      {Key? key, required this.activeTagButtom})
       : super(key: key);
 
   @override
@@ -53,43 +53,54 @@ class HomeBuildTagPage extends StatelessWidget {
                   height: 20,
                 ),
                 BuildTagButton(
-                  listaTelas: listaTelas,
+                  onPressed: () {
+                    Modular.to.pop();
+                  },
                   activeTagButtom: activeTagButtom,
-                  tag: const ['Bezerra de Menezes','Bairro: Pacaembu'],
+                  tag: const ['Bezerra de Menezes', 'Bairro: Pacaembu'],
                   icon: const Icon(Icons.travel_explore),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 BuildTagButton(
-                  listaTelas: listaTelas,
+                  onPressed: () {
+                    Modular.to.pop();
+                  },
                   activeTagButtom: activeTagButtom,
-                  tag: const ['Eurípedes Barsanulfo','Bairro: Morada Nova'],
+                  tag: const ['Eurípedes Barsanulfo', 'Bairro: Morada Nova'],
                   icon: const Icon(Icons.people),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 BuildTagButton(
-                  listaTelas: listaTelas,
+                  onPressed: () {
+                    Modular.to.pop();
+                  },
                   activeTagButtom: activeTagButtom,
-                  tag: const ['Mãe Zeferina','Bairro: Taiaman'],
+                  tag: const ['Mãe Zeferina', 'Bairro: Taiaman'],
                   icon: const Icon(Icons.login),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 BuildTagButton(
-                  listaTelas: listaTelas,
+                  onPressed: () {
+                    Modular.to.pop();
+                  },
                   activeTagButtom: activeTagButtom,
-                  tag: const ['Simão Pedro','Bairro: São Francisco'],
+                  tag: const ['Simão Pedro', 'Bairro: São Francisco'],
                   icon: const Icon(Icons.settings),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 BuildTagButton(
-                  listaTelas: listaTelas,
+                  onPressed: () {
+                    Modular.to.pop();
+                    _info(context);                    
+                  },
                   activeTagButtom: activeTagButtom,
                   tag: const ['Informações'],
                   icon: const Icon(Icons.info),
@@ -101,5 +112,27 @@ class HomeBuildTagPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future _info(BuildContext context) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            title: const Text("Informações"),
+            titleTextStyle: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
+            actionsOverflowButtonSpacing: 20,
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Modular.to.pop();
+                  },
+                  child: const Text("Close")),
+            ],
+            content: const Text("Esta pagina foi criada para que as familias assistidas pela OSGET - Obras Sociais do Grupo Espirita Paulo de Tarso, sejam adotadas com sextas natalinas."),
+          );
+        });
   }
 }

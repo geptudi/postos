@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BuildTagButton extends StatelessWidget {
-  final ValueNotifier<List<Map<String, dynamic>>> listaTelas;
+  final void Function()? onPressed;
   final ValueNotifier<String> activeTagButtom;
   final List<String> tag;
   final Icon icon;
@@ -10,7 +10,7 @@ class BuildTagButton extends StatelessWidget {
       required this.activeTagButtom,
       required this.tag,
       required this.icon,
-      required this.listaTelas})
+      this.onPressed})
       : super(key: key);
 
   @override
@@ -49,7 +49,8 @@ class BuildTagButton extends StatelessWidget {
             ],
           ),
           onPressed: () {
-            activeTagButtom.value = tag[0];
+            if(tag[0] != 'Informações') activeTagButtom.value = tag[0];
+            if (onPressed != null) onPressed!();
           },
         ));
   }

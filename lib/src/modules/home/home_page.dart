@@ -17,46 +17,53 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Cestas Natalinas OSGEPT')),
-      drawer: HomeBuildTagPage(
-        activeTagButtom: controller.activeTagButtom,
-        listaTelas: controller.listaTelas,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: ExpansionPanelList.radio(
-            expansionCallback: (int index, bool isExpanded) {
-              setState(() => _products[index].isExpanded = !isExpanded);
-            },
-            children: _products.map<ExpansionPanel>((Product product) {
-              return ExpansionPanelRadio(
-                // isExpanded: product.isExpanded,
-                value: product.id,
-                canTapOnHeader: true,
-                headerBuilder: (BuildContext context, bool isExpanded) {
-                  return ListTile(
-                    leading: CircleAvatar(child: Text(product.id.toString())),
-                    title: Text(product.title),
-                  );
-                },
-                body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: Text(product.description),
-                    ),
-                    Image.network(
-                        'https://picsum.photos/id/${product.id}/500/300'),
-                  ],
-                ),
-              );
-            }).toList(),
+    return ValueListenableBuilder(
+      valueListenable: controller.activeTagButtom,
+      builder: (BuildContext context, String activeTag, Widget? child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Cestas Natalinas do Posto $activeTag'),
           ),
-        ),
-      ),
+          drawer: HomeBuildTagPage(
+            activeTagButtom: controller.activeTagButtom,
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: ExpansionPanelList.radio(
+                expansionCallback: (int index, bool isExpanded) {
+                  setState(() => _products[index].isExpanded = !isExpanded);
+                },
+                children: _products.map<ExpansionPanel>((Product product) {
+                  return ExpansionPanelRadio(
+                    // isExpanded: product.isExpanded,
+                    value: product.id,
+                    canTapOnHeader: true,
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        leading:
+                            CircleAvatar(child: Text(product.id.toString())),
+                        title: Text(product.title),
+                      );
+                    },
+                    body: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: Text(product.description),
+                        ),
+                        Image.network(
+                            'https://picsum.photos/id/${product.id}/500/300'),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
