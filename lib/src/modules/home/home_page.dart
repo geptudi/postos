@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:icon_badge/icon_badge.dart';
+import '../../models/parameters.dart';
 import 'models/assistido_models.dart';
 import 'modelsview/home_build_tag_page.dart';
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context, AsyncSnapshot<bool> isInited) =>
           ValueListenableBuilder(
         valueListenable: controller.activeTagButtom,
-        builder: (BuildContext context, String activeTag, Widget? child) =>
+        builder: (BuildContext context, int activeTag, Widget? child) =>
             isInited.hasData
                 ? FutureBuilder<List<dynamic>?>(
                     initialData: const <Assistido>[],
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                       }
                       return Scaffold(
                         appBar: AppBar(
-                          title: Text('Cestas Natalinas do Posto $activeTag'),
+                          title: Text('Cestas Natalinas do Posto ${postos[activeTag]![0]}\n${postos[activeTag]![2]}'),
                           actions: <Widget>[
                             IconBadge(
                               icon: const Icon(Icons.sync),

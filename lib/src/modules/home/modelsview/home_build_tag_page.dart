@@ -4,17 +4,15 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'home_build_tag_button.dart';
 
 class HomeBuildTagPage extends StatelessWidget {
-  final ValueNotifier<String> activeTagButtom;
-  const HomeBuildTagPage(
-      {Key? key, required this.activeTagButtom})
-      : super(key: key);
+  final ValueNotifier<int> activeTagButtom;
+  const HomeBuildTagPage({super.key, required this.activeTagButtom});
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ValueListenableBuilder(
         valueListenable: activeTagButtom,
-        builder: (BuildContext context, String value, Widget? child) {
+        builder: (BuildContext context, int value, Widget? child) {
           return Container(
             margin: const EdgeInsets.only(
               left: 30.0,
@@ -57,7 +55,7 @@ class HomeBuildTagPage extends StatelessWidget {
                     Modular.to.pop();
                   },
                   activeTagButtom: activeTagButtom,
-                  tag: const ['Bezerra de Menezes', 'Bairro: Pacaembu'],
+                  tag: 0,
                   icon: const Icon(Icons.travel_explore),
                 ),
                 const SizedBox(
@@ -68,7 +66,7 @@ class HomeBuildTagPage extends StatelessWidget {
                     Modular.to.pop();
                   },
                   activeTagButtom: activeTagButtom,
-                  tag: const ['Eurípedes Barsanulfo', 'Bairro: Morada Nova'],
+                  tag: 1, 
                   icon: const Icon(Icons.people),
                 ),
                 const SizedBox(
@@ -79,7 +77,7 @@ class HomeBuildTagPage extends StatelessWidget {
                     Modular.to.pop();
                   },
                   activeTagButtom: activeTagButtom,
-                  tag: const ['Mãe Zeferina', 'Bairro: Taiaman'],
+                  tag: 2, 
                   icon: const Icon(Icons.login),
                 ),
                 const SizedBox(
@@ -90,7 +88,7 @@ class HomeBuildTagPage extends StatelessWidget {
                     Modular.to.pop();
                   },
                   activeTagButtom: activeTagButtom,
-                  tag: const ['Simão Pedro', 'Bairro: São Francisco'],
+                  tag: 3,
                   icon: const Icon(Icons.settings),
                 ),
                 const SizedBox(
@@ -99,10 +97,10 @@ class HomeBuildTagPage extends StatelessWidget {
                 BuildTagButton(
                   onPressed: () {
                     Modular.to.pop();
-                    _info(context);                    
+                    _info(context);
                   },
                   activeTagButtom: activeTagButtom,
-                  tag: const ['Informações'],
+                  tag: 4, //'Informações',
                   icon: const Icon(Icons.info),
                 ),
                 const Spacer(),
@@ -131,7 +129,18 @@ class HomeBuildTagPage extends StatelessWidget {
                   },
                   child: const Text("Close")),
             ],
-            content: const Text("Esta pagina foi criada para que as familias assistidas pela OSGET - Obras Sociais do Grupo Espirita Paulo de Tarso, sejam adotadas com sextas natalinas."),
+            content: const Text("""
+As contribuições serão direcionadas aos quarto (4) postos de assistência das Obras Sociais do Grupo Espírita Paulo de Tarso, para o bem-estar de nossa comunidade! 
+
+Ao fazer uma doação de cestas básicas, ou adotar diretamente uma família, você está apoiando diretamente os assistidos que são acompanhados pelos Postos de Assistência. 
+
+Sua generosidade faz a diferença na vida de quem mais precisa. 
+
+Junte-se a nós nessa causa e ajude a construir um natal melhor e recheado para todos.
+
+Que Deus lhe abençoe.
+
+"""),
           );
         });
   }
