@@ -68,39 +68,47 @@ class _HomePageState extends State<HomePage> {
                         body: SingleChildScrollView(
                           child: Padding(
                             padding: const EdgeInsets.all(12),
-                            child: ExpansionPanelList.radio(
-                              expansionCallback: (int index, bool isExpanded) {
-                                setState(() => assistidoList[index].isExpanded =
-                                    !isExpanded);
-                              },
-                              children: assistidoList
-                                  .map<ExpansionPanel>((Assistido product) {
-                                return ExpansionPanelRadio(
-                                  backgroundColor: Colors.white,
-                                  // isExpanded: product.isExpanded,
-                                  value: product.ident,
-                                  canTapOnHeader: true,
-                                  headerBuilder:
-                                      (BuildContext context, bool isExpanded) {
-                                    return ListTile(
-                                      leading: CircleAvatar(
-                                          child:
-                                              Text(product.ident.toString())),
-                                      title: Text(
-                                          'Família com ${product.nomesMoradores.split(';').length} moradores sendo:\n0 - Adultos\n0 - Adolescente(s) e\n0 - Crianças\nResponsável: ${product.nomeM1}'),
-                                    );
-                                  },
-                                  body: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('${product.logradouro}: ${product.endereco} nº ${product.numero}\nBairro: ${product.bairro}\nTelefone: ${product.fone}'),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
+                            child: ValueListenableBuilder(
+                              valueListenable: controller.isExpanded,
+                              builder: (BuildContext context, bool activeTag,
+                                      Widget? child) =>
+                                  ExpansionPanelList.radio(
+                                expansionCallback:
+                                    (int index, bool isExpanded) {
+                                  controller.isExpanded.value =
+                                      !controller.isExpanded.value;
+                                },
+                                children: assistidoList
+                                    .map<ExpansionPanel>((Assistido product) {
+                                  return ExpansionPanelRadio(
+                                    backgroundColor: Colors.white,
+                                    // isExpanded: product.isExpanded,
+                                    value: product.ident,
+                                    canTapOnHeader: true,
+                                    headerBuilder: (BuildContext context,
+                                        bool isExpanded) {
+                                      return ListTile(
+                                        leading: CircleAvatar(
+                                            child:
+                                                Text(product.ident.toString())),
+                                        title: Text(
+                                            'Família com ${product.nomesMoradores.split(';').length} moradores sendo:\n0 - Adultos\n0 - Adolescente(s) e\n0 - Crianças\nResponsável: ${product.nomeM1}'),
+                                      );
+                                    },
+                                    body: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            '${product.logradouro}: ${product.endereco} nº ${product.numero}\nBairro: ${product.bairro}\nTelefone: ${product.fone}'),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ),
                         ),

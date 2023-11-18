@@ -1,3 +1,4 @@
+
 class Assistido {
   int ident;
   String updatedApps;
@@ -20,7 +21,6 @@ class Assistido {
   String parentescos;
   String nomesMoradores;
   String datasNasc;
-  bool isExpanded;
 
   Assistido({
     this.ident = -1,
@@ -44,7 +44,6 @@ class Assistido {
     this.parentescos = "",
     this.nomesMoradores = "",
     this.datasNasc = "",
-    this.isExpanded = false,
   });
 
   Assistido.assistido(Assistido assistido)
@@ -68,8 +67,7 @@ class Assistido {
         chamada = assistido.chamada,
         parentescos = assistido.parentescos,
         nomesMoradores = assistido.nomesMoradores,
-        datasNasc = assistido.datasNasc,
-        isExpanded = assistido.isExpanded;
+        datasNasc = assistido.datasNasc;
 
   factory Assistido.fromList(List<dynamic> value) {
     return Assistido(
@@ -94,7 +92,6 @@ class Assistido {
       parentescos: value[18].toString(),
       nomesMoradores: value[19].toString(),
       datasNasc: value[20].toString(),
-      isExpanded: false,
     );
   }
 

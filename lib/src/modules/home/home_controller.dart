@@ -6,6 +6,7 @@ import 'repositories/assistido_gsheet_repository.dart';
 class HomeController {
   final ValueNotifier<String> activeTagButtom =
       ValueNotifier<String>('Bezerra de Menezes');
+  final ValueNotifier<bool> isExpanded = ValueNotifier<bool>(false);      
   late final AssistidoRemoteStorageRepository assistidosStoreList;
 
 
