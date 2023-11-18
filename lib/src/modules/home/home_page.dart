@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                       }
                       return Scaffold(
                         appBar: AppBar(
-                          title: Text('Cestas Natalinas do Posto ${postos[activeTag]![0]}\n${postos[activeTag]![2]}'),
+                          title: Text('Cestas Natalinas do\nPosto ${postos[activeTag]![0]}'),
                           actions: <Widget>[
                             IconBadge(
                               icon: const Icon(Icons.sync),
