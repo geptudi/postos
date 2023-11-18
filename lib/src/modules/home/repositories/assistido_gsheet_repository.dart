@@ -1,25 +1,24 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import '../interfaces/asssistido_remote_storage_interface.dart';
-import '../interfaces/provider_interface.dart';
 import '../models/device_info_model.dart';
 
 class AssistidoRemoteStorageRepository
     implements AssistidoRemoteStorageInterface {
-  late final ProviderInterface provider;
+  Dio? provider;
+  final String baseUrl = 'https://script.google.com';
   final DeviceInfoModel deviceInfoModel = DeviceInfoModel();
-  late final String baseUrl;
 
-  AssistidoRemoteStorageRepository({required provider}) {
-    this.provider = provider ?? Modular.get<ProviderInterface>();
+  AssistidoRemoteStorageRepository({Dio? provider}) {
+    this.provider = provider ?? Modular.get<Dio>();
   }
 
   @override
   Future<void> init() async {
     await deviceInfoModel.initPlatformState();
-    baseUrl = 'script.google.com';
   }
 
   Future<dynamic> sendGet(
@@ -29,9 +28,8 @@ class AssistidoRemoteStorageRepository
       dynamic p1,
       dynamic p2,
       dynamic p3}) async {
-    var response = await provider.get(baseUrl,
-        bodyUrl:
-            '/macros/s/AKfycbwKiHbY2FQ295UrySD3m8pG_JDJO5c8SFxQG4VQ9eo9pzZQMmEfpAZYKdhVJcNtznGV/exec',
+    var response = await provider?.get(
+        '$baseUrl/macros/s/AKfycbwKiHbY2FQ295UrySD3m8pG_JDJO5c8SFxQG4VQ9eo9pzZQMmEfpAZYKdhVJcNtznGV/exec',
         queryParameters: {
           "table": table,
           "func": func,
@@ -41,42 +39,12 @@ class AssistidoRemoteStorageRepository
           "p2": p2,
           "p3": p3,
         });
-    if (response != null) {
-      if (response["status"] == "SUCCESS") {
-        return response["items"];
+    if (response?.data != null) {
+      if ((response?.data?["status"] ?? "Error") == "SUCCESS") {
+        return response?.data!["items"];
       } else {
         debugPrint(
-            "AssistidoRemoteStorageRepository - sendUrl - ${response["status"]}");
-      }
-    }
-    return null;
-  }
-
-  Future<dynamic> sendPost(
-      {String table = "BDados",
-      required String func,
-      required String type,
-      dynamic p1,
-      dynamic p2,
-      dynamic p3}) async {
-    var response = await provider.post(baseUrl,
-        bodyUrl:
-            '/macros/s/AKfycbwKiHbY2FQ295UrySD3m8pG_JDJO5c8SFxQG4VQ9eo9pzZQMmEfpAZYKdhVJcNtznGV/exec',
-        queryParameters: {
-          "table": table,
-          "func": func,
-          "type": type,
-          "userName": deviceInfoModel.identify!,
-          "p1": p1,
-          "p2": p2,
-        },
-        body: p3);
-    if (response != null) {
-      if (response['status'] == "SUCCESS") {
-        return response['items'];
-      } else {
-        debugPrint(
-            "AssistidoRemoteStorageRepository - sendUrl - ${response['status']}");
+            "AssistidoRemoteStorageRepository - sendUrl - ${response?.data}");
       }
     }
     return null;
@@ -94,7 +62,7 @@ class AssistidoRemoteStorageRepository
   @override
   Future<String?> addFile(
       String targetDir, String fileName, Uint8List data) async {
-    return (await sendPost(
+    return (await sendGet(
         func: 'add',
         type: 'file',
         p1: targetDir,
@@ -143,7 +111,7 @@ class AssistidoRemoteStorageRepository
   @override
   Future<String?> setFile(
       String targetDir, String fileName, Uint8List data) async {
-    final String? response = await sendPost(
+    final String? response = await sendGet(
         func: 'set',
         type: 'file',
         p1: targetDir,

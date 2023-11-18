@@ -36,11 +36,11 @@ class _HomePageState extends State<HomePage> {
                 ? FutureBuilder<List<dynamic>?>(
                     initialData: const <Assistido>[],
                     future: controller.assistidosStoreList
-                        .getChanges(table: activeTag),
+                        .getChanges(table: "BDados"/*activeTag*/),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<dynamic>?> response) {
                       if (response.data != null) {
-                        if ((response as List).isNotEmpty) {
+                        if (response.data!.isNotEmpty) {
                           assistidoList = response.data!
                               .map((e) => Assistido.fromList(e))
                               .toList();
