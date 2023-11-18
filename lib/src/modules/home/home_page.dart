@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                                           child:
                                               Text(product.ident.toString())),
                                       title: Text(
-                                          'Família com ${product.nomesMoradores.split(';').length} moradores sendo:\n0 - Adultos\n0 - Adolescente(s) e\n0 - Crianças\nResponsável: ${product.nomeM1}'),
+                                          'Família com ${aux.length} moradores sendo:\n${aux.map((e) => e >= 18).length} - Adultos\n${aux.map((e) => e >= 12 && e > 18).length} - Adolescente(s) e\n${aux.map((e) => e < 12).length} - Crianças\nResponsável: ${product.nomeM1}'),
                                     );
                                   },
                                   body: Column(
