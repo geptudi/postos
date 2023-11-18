@@ -10,6 +10,8 @@ abstract class AssistidoRemoteStorageInterface {
 
   Future<List<dynamic>?> getChanges(
       {String table}); //Lê todas as linhas apartir da primeira linha
+  Future<List<dynamic>?> getDatas(
+      {String table}); //Lê todas as linhas apartir da primeira linha      
   Future<List<dynamic>?> getRow(String rowId,
       {String table}); //Retorna o valor das linhas solicitadas
   Future<String?> getFile(String targetDir,

@@ -29,22 +29,23 @@ class AssistidoRemoteStorageRepository
       dynamic p2,
       dynamic p3}) async {
     var response = await provider?.get(
-        '$baseUrl/macros/s/AKfycbwKiHbY2FQ295UrySD3m8pG_JDJO5c8SFxQG4VQ9eo9pzZQMmEfpAZYKdhVJcNtznGV/exec',
-        queryParameters: {
-          "table": table,
-          "func": func,
-          "type": type,
-          "userName": deviceInfoModel.identify!,
-          "p1": p1,
-          "p2": p2,
-          "p3": p3,
-        });
+      '$baseUrl/macros/s/AKfycbwKiHbY2FQ295UrySD3m8pG_JDJO5c8SFxQG4VQ9eo9pzZQMmEfpAZYKdhVJcNtznGV/exec',
+      queryParameters: {
+        "table": table,
+        "func": func,
+        "type": type,
+        "userName": deviceInfoModel.identify!,
+        "p1": p1,
+        "p2": p2,
+        "p3": p3,
+      },
+    );
     if (response?.data != null) {
       if ((response?.data?["status"] ?? "Error") == "SUCCESS") {
         return response?.data!["items"];
       } else {
         debugPrint(
-            "AssistidoRemoteStorageRepository - sendUrl - ${response?.data}");
+            "AssistidoRemoteStorageRepository - sendUrl - ${response?.data["status"]}");
       }
     }
     return null;
@@ -70,6 +71,20 @@ class AssistidoRemoteStorageRepository
         p3: data)); //base64.encode(data).toString()));
   }
 
+
+  @override
+  Future<List<dynamic>?> getDatas({String table = "BDados"}) async {
+    List<dynamic>? response =
+        await sendGet(table: table, func: 'get', type: 'datas', p1:'Condição', p2: 'ATIVO');
+    return response;
+    /*if (response != null) {
+        if ((response as List).isNotEmpty) {
+        return response.map((e) => Assistido.fromList(e)).toList();
+      }
+    }
+    return null;*/
+  }
+  
   @override
   Future<List<dynamic>?> getChanges({String table = "BDados"}) async {
     List<dynamic>? response =

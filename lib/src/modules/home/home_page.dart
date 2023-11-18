@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:icon_badge/icon_badge.dart';
-import 'package:rx_notifier/rx_notifier.dart';
 import 'models/assistido_models.dart';
 import 'modelsview/home_build_tag_page.dart';
 import 'home_controller.dart';
@@ -36,7 +35,7 @@ class _HomePageState extends State<HomePage> {
                 ? FutureBuilder<List<dynamic>?>(
                     initialData: const <Assistido>[],
                     future: controller.assistidosStoreList
-                        .getChanges(table: "BDados"/*activeTag*/),
+                        .getDatas(table: "BDados" /*activeTag*/),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<dynamic>?> response) {
                       if (response.data != null) {
@@ -50,18 +49,16 @@ class _HomePageState extends State<HomePage> {
                         appBar: AppBar(
                           title: Text('Cestas Natalinas do Posto $activeTag'),
                           actions: <Widget>[
-                            RxBuilder(
-                              builder: (BuildContext context) => IconBadge(
-                                icon: const Icon(Icons.sync),
-                                itemCount: assistidoList.length,
-                                badgeColor: Colors.red,
-                                itemColor: Colors.white,
-                                maxCount: 99,
-                                hideZero: true,
-                                onTap: () async {
-                                  setState(() {});
-                                },
-                              ),
+                            IconBadge(
+                              icon: const Icon(Icons.sync),
+                              itemCount: assistidoList.length,
+                              badgeColor: Colors.red,
+                              itemColor: Colors.white,
+                              maxCount: 999,
+                              hideZero: true,
+                              onTap: () async {
+                                setState(() {});
+                              },
                             ),
                           ],
                         ),
@@ -79,6 +76,7 @@ class _HomePageState extends State<HomePage> {
                               children: assistidoList
                                   .map<ExpansionPanel>((Assistido product) {
                                 return ExpansionPanelRadio(
+                                  backgroundColor: Colors.white,
                                   // isExpanded: product.isExpanded,
                                   value: product.ident,
                                   canTapOnHeader: true,
@@ -88,20 +86,17 @@ class _HomePageState extends State<HomePage> {
                                       leading: CircleAvatar(
                                           child:
                                               Text(product.ident.toString())),
-                                      title: Text(product.nomeM1),
+                                      title: Text(
+                                          'Família com ${product.nomesMoradores.split(';').length} moradores sendo:\n0 - Adultos\n0 - Adolescente(s) e\n0 - Crianças\nResponsável: ${product.nomeM1}'),
                                     );
                                   },
                                   body: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 12.0),
-                                        child: Text(product.nomesMoradores),
-                                      ),
-                                      Image.network(
-                                          'https://picsum.photos/id/${product.ident}/500/300'),
+                                      Text('${product.logradouro}: ${product.endereco} nº ${product.numero}\nBairro: ${product.bairro}\nTelefone: ${product.fone}'),
                                     ],
                                   ),
                                 );
