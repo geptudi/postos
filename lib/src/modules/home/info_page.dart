@@ -61,17 +61,7 @@ class _InfoPageState extends State<InfoPage> {
               [
             const Text(
               textAlign: TextAlign.justify,
-              """
-Esta página visa proporcionar um natal cheio de muito amor e fraternidade. 
-
-Aqui você pode fazer a diferença!! Veja como é simples!!
-
-Basta escolher um dos quarto (4) postos de assistência das Obras Sociais do Grupo Espírita Paulo de Tarso, nos botões abaixo, selecionar uma família na sequência e preencher seus dados como doador.
-
-Pronto. Agora basta salvar o arquivo com o resumo desta família. Neste arquivo você terá as informações para poder entregar pessoalmente esta cesta, ou os dados do coordenador do respectivo posto para você alinhar com ele como será esta entrega.
-
-Para saber mais como usar esta ferramenta, veja o video abaixo:
-""",
+              '\nEsta\tpágina\tvisa\tproporcionar\tum\tnatal\tcheio\tde\tmuito\tamor\te\tfraternidade.\n\nAqui\tvocê\tpode\tfazer\ta\tdiferença!!\tVeja\tcomo\té\tsimples!!\n\nBasta\tescolher\tum\tdos\tquarto\t(4)\tpostos\tde\tassistência\tdas\tObras\tSociais\tdo\tGrupo\tEspírita\tPaulo\tde\tTarso,\tnos\tbotões\tabaixo,\tselecionar\tuma\tfamília\tna\tsequência\te\tpreencher\tseus\tdados\tcomo\tdoador.\n\nPronto.\tAgora\tbasta\tsalvar\to\tarquivo\tcom\to\tresumo\tdesta\tfamília.\tNeste\tarquivo\tvocê\tterá\tas\tinformações\tpara\tpoder\tentregar\tpessoalmente\testa\tcesta,\tou\tos\tdados\tdo\tcoordenador\tdo\trespectivo\tposto\tpara\tvocê\talinhar\tcom\tele\tcomo\tserá\testa\tentrega.\n\nPara\tsaber\tmais\tcomo\tusar\testa\tferramenta,\tveja\to\tvideo\tabaixo:\n\n',
               style: TextStyle(color: Colors.black, fontSize: 16.0),
             ),
             player,
