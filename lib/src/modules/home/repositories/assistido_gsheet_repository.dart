@@ -34,7 +34,7 @@ class AssistidoRemoteStorageRepository
         "table": table,
         "func": func,
         "type": type,
-        "userName": deviceInfoModel.identify!,
+        "userName": "",
         "p1": p1,
         "p2": p2,
         "p3": p3,

@@ -1,4 +1,3 @@
-
 class Assistido {
   int ident;
   String updatedApps;
@@ -69,6 +68,11 @@ class Assistido {
         nomesMoradores = assistido.nomesMoradores,
         datasNasc = assistido.datasNasc;
 
+  factory Assistido.vazio() {
+    return Assistido(
+        nomeM1: "Nome", logradouro: "Rua", endereco: "", numero: "0");
+  }
+
   factory Assistido.fromList(List<dynamic> value) {
     return Assistido(
       ident: value[0] as int,
@@ -93,6 +97,32 @@ class Assistido {
       nomesMoradores: value[19].toString(),
       datasNasc: value[20].toString(),
     );
+  }
+
+void copy(Assistido? assistido) {
+    if (assistido != null) {
+      ident = assistido.ident;
+      updatedApps = assistido.updatedApps;
+      nomeM1 = assistido.nomeM1;
+      photoName = assistido.photoName;
+      condicao = assistido.condicao;
+      dataNascM1 = assistido.dataNascM1;
+      estadoCivil = assistido.estadoCivil;
+      fone = assistido.fone;
+      rg = assistido.rg;
+      cpf = assistido.cpf;
+      logradouro = assistido.logradouro;
+      endereco = assistido.endereco;
+      numero = assistido.numero;
+      bairro = assistido.bairro;
+      complemento = assistido.complemento;
+      cep = assistido.cep;
+      obs = assistido.obs;
+      chamada = assistido.chamada;
+      parentescos = assistido.parentescos;
+      nomesMoradores = assistido.nomesMoradores;
+      datasNasc = assistido.datasNasc;
+    }
   }
 
   void changeItens(String? itens, dynamic datas) {

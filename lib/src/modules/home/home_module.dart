@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:postos/src/modules/home/info_page.dart';
 import 'home_controller.dart';
 import 'home_page.dart';
+import 'modelsview/insert_edit_view.dart';
 import 'repositories/assistido_gsheet_repository.dart';
 
 class HomeModule extends Module {
@@ -14,6 +16,8 @@ class HomeModule extends Module {
 
   @override
   void routes(r) {
-    r.child('/', child: (_) => const HomePage());
+    r.child('/', child: (_) => const InfoPage());
+    r.child('/home', child: (_) => const HomePage());  
+    r.child('/insert', child: (_) => InsertEditViewPage(assistido: r.args.data['assistido']));  
   }
 }

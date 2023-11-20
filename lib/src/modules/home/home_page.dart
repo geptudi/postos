@@ -1,11 +1,12 @@
-import 'package:intl/intl.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:icon_badge/icon_badge.dart';
-import '../../models/parameters.dart';
-import 'models/assistido_models.dart';
-import 'modelsview/home_build_tag_page.dart';
+import 'package:intl/intl.dart';
+import '../../models/styles.dart';
 import 'home_controller.dart';
+import 'models/assistido_models.dart';
+import 'package:badges/badges.dart' as bg;
+import 'template_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,128 +16,144 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final controller = Modular.get<HomeController>();
-  late Future<bool> initedState;
+  final _controller = Modular.get<HomeController>();
   List<Assistido> assistidoList = [];
-  List<int> aux = [];
-
   @override
   void initState() {
-    initedState = controller.init();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: initedState,
-      builder: (BuildContext context, AsyncSnapshot<bool> isInited) =>
-          ValueListenableBuilder(
-        valueListenable: controller.activeTagButtom,
-        builder: (BuildContext context, int activeTag, Widget? child) =>
-            isInited.hasData
-                ? FutureBuilder<List<dynamic>?>(
-                    initialData: const <Assistido>[],
-                    future: controller.assistidosStoreList
-                        .getDatas(table: "BDados" /*activeTag*/),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<dynamic>?> response) {
-                      if (response.data != null) {
-                        if (response.data!.isNotEmpty) {
-                          assistidoList = response.data!
-                              .map((e) => Assistido.fromList(e))
-                              .toList();
-                        }
-                      }
-                      return Scaffold(
-                        appBar: AppBar(
-                          title: Text(
-                            'Cestas Natalinas do\nPosto ${postos[activeTag]![0]}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              height: 1.1,
-                            ),
-                          ),
-                          actions: <Widget>[
-                            IconBadge(
-                              icon: const Icon(Icons.sync),
-                              itemCount: assistidoList.length,
-                              badgeColor: Colors.red,
-                              itemColor: Colors.white,
-                              maxCount: 999,
-                              hideZero: true,
-                              onTap: () async {
-                                setState(() {});
-                              },
-                            ),
-                          ],
-                        ),
-                        drawer: HomeBuildTagPage(
-                          activeTagButtom: controller.activeTagButtom,
-                        ),
-                        body: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: ExpansionPanelList.radio(
-                              expansionCallback: (int index, bool isExpanded) {
-                                controller.isExpanded.value =
-                                    !controller.isExpanded.value;
-                              },
-                              children: assistidoList
-                                  .map<ExpansionPanel>((Assistido product) {
-                                return ExpansionPanelRadio(
-                                  backgroundColor: Colors.white,
-                                  // isExpanded: product.isExpanded,
-                                  value: product.ident,
-                                  canTapOnHeader: true,
-                                  headerBuilder:
-                                      (BuildContext context, bool isExpanded) {
-                                    var st = product.datasNasc.substring(
-                                        0,
-                                        product.datasNasc.isEmpty
-                                            ? 0
-                                            : product.datasNasc.length - 1);
-                                    aux = ([product.dataNascM1] + st.split(';'))
-                                        .map(
-                                      (e) {
-                                        return e == ""
-                                            ? calculateAge(
-                                                DateFormat('dd/MM/yyyy')
-                                                    .parse("1/1/1900"))
-                                            : calculateAge(
-                                                DateFormat('dd/MM/yyyy')
-                                                    .parse(e));
-                                      },
-                                    ).toList();
-                                    return ListTile(
-                                      leading: CircleAvatar(
-                                          child:
-                                              Text(product.ident.toString())),
-                                      title: Text(
-                                          'Família com ${aux.length} moradores sendo:\n${aux.where((e) => e < 12).length} - Crianças\n${aux.where((e) => (e >= 12 && e <= 18)).length} - Adolescente(s) e\n${aux.where((e) => e > 18).length} - Adultos\nResponsável: ${product.nomeM1}'),
-                                    );
-                                  },
-                                  body: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          '${product.logradouro}: ${product.endereco} nº ${product.numero}\nBairro: ${product.bairro}\nTelefone: ${product.fone}'),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                : const Center(
-                    child: CircularProgressIndicator(),
+    return FutureBuilder<List<dynamic>?>(
+      future: _controller.assistidosStoreList.getDatas(table: "BDados"),
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>?> response) {
+        if (response.data != null) {
+          if (response.data!.isNotEmpty) {
+            assistidoList =
+                response.data!.map((e) => Assistido.fromList(e)).toList();
+          }
+        }
+        return TemplatePage(
+          hasProx: null,
+          isLeading: true,
+          answerLenght: 1,
+          header: bg.Badge(
+            badgeStyle: const bg.BadgeStyle(badgeColor: Colors.red),
+            position: bg.BadgePosition.topStart(top: 0),
+            badgeContent: const Text(
+              '53',
+              style: TextStyle(color: Colors.white, fontSize: 10.0),
+            ),
+            child: Text(
+              'Cestas Natalinas do\nPosto ${_controller.activeTagButtom.value}',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 26,
+                height: 1.5,
+                color: Colors.white,
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(2.0, 2.0),
+                    blurRadius: 1.0,
+                    color: Color.fromARGB(255, 0, 0, 0),
                   ),
+                ],
+              ),
+            ),
+          ),
+          itens: (HomeController controller,
+                  GlobalKey<FormFieldState<List<ValueNotifier<String>>>>
+                      state) =>
+              assistidoList
+                  .map<Widget>(
+                    (pessoa) => Column(
+                      children: <Widget>[
+                        row(pessoa),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 100,
+                            right: 16,
+                          ),
+                          child: Container(
+                            height: 1,
+                            color: Styles.linhaProdutoDivisor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                  .toList(),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Widget row(Assistido pessoa) {
+    var st = pessoa.datasNasc.substring(
+        0, pessoa.datasNasc.isEmpty ? 0 : pessoa.datasNasc.length - 1);
+    var aux = ([pessoa.dataNascM1] + st.split(';')).map(
+      (e) {
+        return e == ""
+            ? calculateAge(DateFormat('dd/MM/yyyy').parse("01/01/1900"))
+            : calculateAge(DateFormat('dd/MM/yyyy').parse(e));
+      },
+    ).toList();
+    return SafeArea(
+      top: false,
+      bottom: false,
+      minimum: const EdgeInsets.only(
+        left: 16,
+        top: 8,
+        bottom: 8,
+        right: 8,
+      ),
+      child: ListTile(
+        leading: CircleAvatar(child: Text(pessoa.ident.toString())),
+        title: Row(
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Família com ${aux.length} moradores',
+                      style: Styles.linhaProdutoNomeDoItem,
+                    ),
+                    const Padding(padding: EdgeInsets.only(top: 8)),
+                    Text(
+                      '${aux.where((e) => e < 12).length} - Crianças\n${aux.where((e) => (e >= 12 && e <= 18)).length} - Adolescente(s) e\n${aux.where((e) => e > 18).length} - Adultos',
+                      style: Styles.linhaProdutoPrecoDoItem,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => Modular.to.pushNamed(
+                'insert',
+                arguments: {
+                  "assistido": pessoa,
+                },
+              ),
+              child: const Icon(
+                Icons.edit,
+                size: 30.0,
+                color: Colors.blue,
+                semanticLabel: 'Edit',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
