@@ -43,7 +43,7 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
           isLeading: true,
           answerLenght: 1,
           header: const Text(
-            'Sobre / Informações:',
+            'Dados do Doador',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 26,
