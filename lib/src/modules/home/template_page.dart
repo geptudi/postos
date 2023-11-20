@@ -75,34 +75,26 @@ class _TemplatePageState extends State<TemplatePage> {
                       topRight: Radius.circular(20)),
                   borderSide: borderSideValue,
                 ),
-                child: Container(
+                child: SizedBox(
                   width: constraints.maxWidth - 2 * tam - 50,
-                  padding: EdgeInsets.only(
-                      left: 20,
-                      top: (widget.header != null ? 0 : 10),
-                      right: 20,
-                      bottom: (widget.header != null ? 5 : 10)),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 0, top: 5, right: 20, bottom: 5),
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_back_outlined),
-                          color: widget.isLeading != true
-                              ? Colors.blueGrey
-                              : Colors.white,
-                          onPressed: (widget.isLeading != true)
-                              ? null
-                              : () {
-                                  Modular.to.pop();
-                                },
+                      if (widget.isLeading != null)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, top: 5, right: 20, bottom: 5),
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back_outlined),
+                            color: Colors.white,
+                            onPressed: () {
+                              Modular.to.pop();
+                            },
+                          ),
                         ),
-                      ),
                       if (widget.header != null)
                         Flexible(
-                          child: widget.header!,
+                          child: Center(child: widget.header!),
                         ),
                     ],
                   ),

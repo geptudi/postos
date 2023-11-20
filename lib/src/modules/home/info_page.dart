@@ -37,7 +37,6 @@ class _InfoPageState extends State<InfoPage> {
       builder: (context, player) {
         return TemplatePage(
           hasProx: "home",
-          isLeading: false,
           answerLenght: 1,
           header: const Text(
             'Sobre / Informações:',

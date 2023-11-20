@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(color: Colors.white, fontSize: 10.0),
             ),
             child: Text(
-              'Cestas Natalinas do\nPosto ${_controller.activeTagButtom.value}',
+              'Cestas Natalinas do Posto ${_controller.activeTagButtom.value}',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 26,
