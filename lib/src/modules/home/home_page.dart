@@ -113,47 +113,44 @@ class _HomePageState extends State<HomePage> {
         bottom: 8,
         right: 8,
       ),
-      child: ListTile(
-        leading: CircleAvatar(child: Text(pessoa.ident.toString())),
-        title: Row(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Família com ${aux.length} moradores',
-                      style: Styles.linhaProdutoNomeDoItem,
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 8)),
-                    Text(
-                      '${aux.where((e) => e < 12).length} - Crianças\n${aux.where((e) => (e >= 12 && e <= 18)).length} - Adolescente(s) e\n${aux.where((e) => e > 18).length} - Adultos',
-                      style: Styles.linhaProdutoPrecoDoItem,
-                    )
-                  ],
-                ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Família com ${aux.length} moradores',
+                    style: Styles.linhaProdutoNomeDoItem,
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 8)),
+                  Text(
+                    '${aux.where((e) => e < 12).length} - Crianças\n${aux.where((e) => (e >= 12 && e <= 18)).length} - Adolescente(s) e\n${aux.where((e) => e > 18).length} - Adultos',
+                    style: Styles.linhaProdutoPrecoDoItem,
+                  )
+                ],
               ),
             ),
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: () => Modular.to.pushNamed(
-                'insert',
-                arguments: {
-                  "assistido": pessoa,
-                },
-              ),
-              child: const Icon(
-                Icons.edit,
-                size: 30.0,
-                color: Colors.blue,
-                semanticLabel: 'Edit',
-              ),
+          ),
+          CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => Modular.to.pushNamed(
+              'insert',
+              arguments: {
+                "assistido": pessoa,
+              },
             ),
-          ],
-        ),
+            child: const Icon(
+              Icons.edit,
+              size: 30.0,
+              color: Colors.blue,
+              semanticLabel: 'Edit',
+            ),
+          ),
+        ],
       ),
     );
   }
