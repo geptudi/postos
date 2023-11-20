@@ -123,7 +123,7 @@ ${postos[controller.activeTagButtom.value]![2]}, e
 ${postos[controller.activeTagButtom.value]![3]}
 
 """,
-                style: const TextStyle(color: Colors.black, fontSize: 15.0),
+                style: const TextStyle(color: Colors.red, fontSize: 15.0),
               ),
             ),
             const Text(
