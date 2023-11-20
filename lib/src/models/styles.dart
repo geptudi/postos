@@ -22,7 +22,7 @@ abstract class Styles {
   );
 
   static const TextStyle linhaProdutoPrecoDoItem = TextStyle(
-    color: Color(0xFF8E8E93),
+    color: Color.fromARGB(255, 133, 133, 141),
     fontSize: 15,
     fontWeight: FontWeight.w300,
   );

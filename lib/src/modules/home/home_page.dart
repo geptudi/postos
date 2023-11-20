@@ -70,15 +70,9 @@ class _HomePageState extends State<HomePage> {
                     (pessoa) => Column(
                       children: <Widget>[
                         row(pessoa),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 100,
-                            right: 16,
-                          ),
-                          child: Container(
-                            height: 1,
-                            color: Styles.linhaProdutoDivisor,
-                          ),
+                        Container(
+                          height: 1,
+                          color: Styles.linhaProdutoDivisor,
                         ),
                       ],
                     ),
