@@ -77,10 +77,7 @@ Para saber mais como usar esta ferramenta, veja o video abaixo:
             player,
             const Text(
               textAlign: TextAlign.justify,
-              """
-
-Perfeito!! Agora escolha o posto de assistência que deseja ajudar:
-""",
+              '\nPerfeito!!\tAgora\tescolha\to\tposto\tde\tassistência\tque\tdeseja\tajudar:\n',
               style: TextStyle(color: Colors.black, fontSize: 16.0),
             ),
             SingleSelectionList(
@@ -97,14 +94,11 @@ Perfeito!! Agora escolha o posto de assistência que deseja ajudar:
                 'Mãe Zeferina',
                 'Simão Pedro',
               ],
-              optionsColumnsSize: 2,
+              optionsColumnsSize: 1,
             ),
             const Text(
               textAlign: TextAlign.justify,
-              """
-
-O posto escolhido foi:
-""",
+              '\nO\tposto\tescolhido\tfoi:\n',
               style: TextStyle(color: Colors.black, fontSize: 15.0),
             ),
             ValueListenableBuilder(
@@ -121,23 +115,13 @@ ${postos[controller.activeTagButtom.value]![0]}
 ${postos[controller.activeTagButtom.value]![1]}
 ${postos[controller.activeTagButtom.value]![2]}, e
 ${postos[controller.activeTagButtom.value]![3]}
-
 """,
                 style: const TextStyle(color: Colors.red, fontSize: 15.0),
               ),
             ),
             const Text(
               textAlign: TextAlign.justify,
-              """
-Sua generosidade faz a diferença na vida de quem mais precisa. 
-
-Junte-se a nós nessa causa e ajude a construir um natal melhor e recheado para todos.
-
-Clique em próximo para continuar.
-
-E que Deus lhe abençõe.
-
-""",
+              '\nSua\tgenerosidade\tfaz\ta\tdiferença\tna\tvida\tde\tquem\tmais\tprecisa.\n\nJunte-se\ta\tnós\tnessa\tcausa\te\tajude\ta\tconstruir\tum\tnatal\tmelhor\te\trecheado\tpara\ttodos.\n\nClique\tem\tpróximo\tpara\tcontinuar.\n\nE\tque\tDeus\tlhe\tabençõe.\n\n',
               style: TextStyle(color: Colors.black, fontSize: 15.0),
             ),
           ],
