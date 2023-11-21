@@ -24,10 +24,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<bool> init() async {
-    final response1 = await _controller.assistidosStoreList.getDatas(
+    final response1 = await _controller.assistidosStoreList.getDatas(planilha: _controller.activeTagButtom.value,
         table: "BDados", columnFilter: 'Condição', valueFilter: 'ATIVO');
     final response2 =
-        await _controller.assistidosStoreList.getDatas(table: "Doador");
+        await _controller.assistidosStoreList.getDatas(planilha:_controller.activeTagButtom.value, table: "Doador");
     if (response1 != null &&
         response1.isNotEmpty &&
         response2 != null &&

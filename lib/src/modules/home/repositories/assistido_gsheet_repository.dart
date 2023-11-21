@@ -74,14 +74,22 @@ class AssistidoRemoteStorageRepository
   @override
   Future<List<dynamic>?> getDatas(
       {String table = "BDados",
+      String? planilha,
       String? columnFilter,
       String? valueFilter}) async {
+    final panilhaId = switch (planilha!) {
+      'Bezerra de Menezes' => '0',
+      'Mãe Zeferina' => '2',
+      'Simão Pedro' => '3',
+      _ => '1',
+    };
     List<dynamic>? response = await sendGet(
         table: table,
         func: 'get',
         type: 'datas',
-        p1: columnFilter ?? "",
-        p2: valueFilter ?? "");
+        p1: panilhaId,
+        p2: columnFilter ?? "",
+        p3: valueFilter ?? "");
     return response;
     /*if (response != null) {
         if ((response as List).isNotEmpty) {
