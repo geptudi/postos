@@ -4,9 +4,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 import '../../models/styles.dart';
 import 'home_controller.dart';
-import 'models/assistido_models.dart';
 import 'package:badges/badges.dart' as bg;
-import 'template_page.dart';
+import 'models/doador_assistido_model.dart';
+import 'modelsview/template_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,69 +17,88 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _controller = Modular.get<HomeController>();
-  List<Assistido> assistidoList = [];
+  List<DoadorAssistido> assistidoList = [];
   @override
   void initState() {
     super.initState();
   }
 
+  Future<bool> init() async {
+    final response1 = await _controller.assistidosStoreList.getDatas(
+        table: "BDados", columnFilter: 'Condição', valueFilter: 'ATIVO');
+    final response2 =
+        await _controller.assistidosStoreList.getDatas(table: "Doador");
+    if (response1 != null &&
+        response1.isNotEmpty &&
+        response2 != null &&
+        response2.isNotEmpty) {
+      for (int index = 0; index < response1.length; index++) {
+        assistidoList.add(
+          DoadorAssistido.fromList(
+            response1[index],
+            value2: response2[index],
+          ),
+        );
+      }
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<dynamic>?>(
-      future: _controller.assistidosStoreList.getDatas(table: "BDados"),
-      builder: (BuildContext context, AsyncSnapshot<List<dynamic>?> response) {
-        if (response.data != null) {
-          if (response.data!.isNotEmpty) {
-            assistidoList =
-                response.data!.map((e) => Assistido.fromList(e)).toList();
-          }
-        }
-        return TemplatePage(
-          hasProx: null,
-          isLeading: true,
-          answerLenght: 1,
-          header: bg.Badge(
-            badgeStyle: const bg.BadgeStyle(badgeColor: Colors.red),
-            position: bg.BadgePosition.topStart(top: 0),
-            badgeContent: const Text(
-              '53',
-              style: TextStyle(color: Colors.white, fontSize: 10.0),
-            ),
-            child: Text(
-              'Cestas Natalinas do Posto ${_controller.activeTagButtom.value}',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 26,
-                height: 1.5,
-                color: Colors.white,
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(2.0, 2.0),
-                    blurRadius: 1.0,
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  ),
-                ],
-              ),
+    return FutureBuilder<bool>(
+      future: init(),
+      builder: (BuildContext context, AsyncSnapshot<bool> initValue) =>
+          TemplatePage(
+        hasProx: null,
+        isLeading: true,
+        answerLenght: 1,
+        header: bg.Badge(
+          badgeStyle: const bg.BadgeStyle(badgeColor: Colors.red),
+          position: bg.BadgePosition.topStart(top: 0),
+          badgeContent: const Text(
+            '53',
+            style: TextStyle(color: Colors.white, fontSize: 10.0),
+          ),
+          child: Text(
+            'Cestas Natalinas do Posto ${_controller.activeTagButtom.value}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 26,
+              height: 1.5,
+              color: Colors.white,
+              shadows: <Shadow>[
+                Shadow(
+                  offset: Offset(2.0, 2.0),
+                  blurRadius: 1.0,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+              ],
             ),
           ),
-          itens: (HomeController controller,
-                  GlobalKey<FormFieldState<List<ValueNotifier<String>>>>
-                      state) =>
-              assistidoList
-                  .map<Widget>(
-                    (pessoa) => Column(
-                      children: <Widget>[
-                        row(pessoa),
-                        Container(
-                          height: 1,
-                          color: Styles.linhaProdutoDivisor,
-                        ),
-                      ],
+        ),
+        itens: (HomeController controller,
+                GlobalKey<FormFieldState<List<ValueNotifier<String>>>> state) =>
+            initValue.data == true
+                ? assistidoList
+                    .map<Widget>(
+                      (pessoa) => Column(
+                        children: <Widget>[
+                          row(pessoa),
+                          Container(
+                            height: 1,
+                            color: Styles.linhaProdutoDivisor,
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList()
+                : [
+                    const Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  )
-                  .toList(),
-        );
-      },
+                  ],
+      ),
     );
   }
 
@@ -88,7 +107,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  Widget row(Assistido pessoa) {
+  Widget row(DoadorAssistido pessoa) {
     var st = pessoa.datasNasc.substring(
         0, pessoa.datasNasc.isEmpty ? 0 : pessoa.datasNasc.length - 1);
     var aux = ([pessoa.dataNascM1] + st.split(';')).map(

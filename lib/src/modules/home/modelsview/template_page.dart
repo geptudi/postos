@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:postos/src/models/styles.dart';
 
-import 'home_controller.dart';
+import '../home_controller.dart';
 
 double typeSpace(double maxWidth) {
   const tamDesejado = 500.0;

@@ -71,11 +71,17 @@ class AssistidoRemoteStorageRepository
         p3: data)); //base64.encode(data).toString()));
   }
 
-
   @override
-  Future<List<dynamic>?> getDatas({String table = "BDados"}) async {
-    List<dynamic>? response =
-        await sendGet(table: table, func: 'get', type: 'datas', p1:'Condição', p2: 'ATIVO');
+  Future<List<dynamic>?> getDatas(
+      {String table = "BDados",
+      String? columnFilter,
+      String? valueFilter}) async {
+    List<dynamic>? response = await sendGet(
+        table: table,
+        func: 'get',
+        type: 'datas',
+        p1: columnFilter ?? "",
+        p2: valueFilter ?? "");
     return response;
     /*if (response != null) {
         if ((response as List).isNotEmpty) {
@@ -84,7 +90,7 @@ class AssistidoRemoteStorageRepository
     }
     return null;*/
   }
-  
+
   @override
   Future<List<dynamic>?> getChanges({String table = "BDados"}) async {
     List<dynamic>? response =

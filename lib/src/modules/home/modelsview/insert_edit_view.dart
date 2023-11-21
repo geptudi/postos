@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:intl/intl.dart';
 import '../home_controller.dart';
-import '../models/assistido_models.dart';
-import '../template_page.dart';
+import '../models/doador_assistido_model.dart';
+import 'template_page.dart';
 
 class InsertEditViewPage extends StatefulWidget {
-  final Assistido? assistido;
+  final DoadorAssistido? assistido;
   const InsertEditViewPage({super.key, this.assistido});
 
   @override
@@ -15,374 +16,250 @@ class InsertEditViewPage extends StatefulWidget {
 }
 
 class _InsertEditViewPageState extends State<InsertEditViewPage> {
-  final _controller = Modular.get<HomeController>();
-  late bool _isAdd;
-  final _assistido = Assistido.vazio();
-  final _formKey = GlobalKey<FormState>();  
-  List<Assistido> assistidoList = [];
+  final _assistido = DoadorAssistido.vazio();
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    _isAdd = widget.assistido == null ? true : false;
     _assistido.copy(widget.assistido);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<dynamic>?>(
-      future: _controller.assistidosStoreList.getDatas(table: "BDados"),
-      builder: (BuildContext context, AsyncSnapshot<List<dynamic>?> response) {
-        if (response.data != null) {
-          if (response.data!.isNotEmpty) {
-            assistidoList =
-                response.data!.map((e) => Assistido.fromList(e)).toList();
-          }
-        }
-        return TemplatePage(
-          hasProx: null,
-          isLeading: true,
-          answerLenght: 1,
-          header: const Text(
-            'Dados do Doador',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 26,
-              height: 1.5,
-              color: Colors.white,
-              shadows: <Shadow>[
-                Shadow(
-                  offset: Offset(2.0, 2.0),
-                  blurRadius: 1.0,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-              ],
-            ),
-          ),
-          itens: (HomeController controller,
-                  GlobalKey<FormFieldState<List<ValueNotifier<String>>>>
-                      state) =>
-              [
-            const SizedBox(height: 20),
-            TextFormField(
-              initialValue: _assistido.nomeM1,
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                icon: Icon(Icons.person),
-                labelText: 'Informe o nome',
-              ),
-              keyboardType: TextInputType.name,
-              autovalidateMode: AutovalidateMode.always,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Por favor entre com um nome';
-                } else if (value.length < 4) {
-                  return 'Nome muito pequeno';
-                }
-                return null;
-              },
-              onChanged: (v) => setState(() => _assistido.nomeM1 = v),
-            ),
-            const SizedBox(height: 15),
-            Row(children: [
-              const Icon(Icons.admin_panel_settings, color: Colors.black54),
-              const SizedBox(width: 15),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text(
-                  "Condição",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.black54,
-                      decorationColor: Colors.black),
-                ),
-                DropdownButton<String>(
-                  dropdownColor: Theme.of(context).colorScheme.background,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black54,
-                      decorationColor: Colors.black),
-                  items: ['ATIVO', 'ESPERA', 'INATIVO']
-                      .map((String dropDownStringItem) {
-                    return DropdownMenuItem<String>(
-                      value: dropDownStringItem,
-                      child: Text(dropDownStringItem),
-                    );
-                  }).toList(),
-                  onChanged: (String? novoItemSelecionado) {
-                    if (novoItemSelecionado != null) {
-                      _assistido.condicao = novoItemSelecionado;
-                    }
-                  },
-                  value: _assistido.condicao.replaceAll(" ", ""),
-                ),
-              ])
-            ]),
-            TextFormField(
-              initialValue: _assistido.dataNascM1,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  icon: Icon(Icons.date_range),
-                  labelText: 'Data de Nascimento'),
-              keyboardType: TextInputType.datetime,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                DataInputFormatter(),
-              ],
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (value) {
-                if (value != null) {
-                  if (value.isNotEmpty && value.length < 10) {
-                    return 'Data de Nascimento Incorreta!!';
-                  }
-                }
-                return null;
-              },
-              onChanged: (v) => setState(() => _assistido.dataNascM1 = v),
-            ),
-            const SizedBox(height: 15),
-            Row(children: [
-              const Icon(Icons.admin_panel_settings, color: Colors.black54),
-              const SizedBox(width: 15),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text(
-                  "Estado Civil",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.black54,
-                      decorationColor: Colors.black),
-                ),
-                DropdownButton<String>(
-                  dropdownColor: Theme.of(context).colorScheme.background,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black54,
-                      decorationColor: Colors.black),
-                  items: [
-                    'Nãodeclarado(a)',
-                    'Solteiro(a)',
-                    'Casado(a)',
-                    'Amaziado(a)',
-                    'Separado(a)',
-                    'Divorciado(a)',
-                    'Viúvo(a)'
-                  ].map((String dropDownStringItem) {
-                    return DropdownMenuItem<String>(
-                      value: dropDownStringItem,
-                      child: Text(dropDownStringItem),
-                    );
-                  }).toList(),
-                  onChanged: (String? novoItemSelecionado) {
-                    if (novoItemSelecionado != null) {
-                      _assistido.estadoCivil = novoItemSelecionado;
-                    }
-                  },
-                  value: _assistido.estadoCivil.replaceAll(" ", ""),
-                ),
-              ])
-            ]),
-            TextFormField(
-                initialValue: _assistido.fone,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    icon: Icon(Icons.phone),
-                    labelText: 'Telefone'),
-                keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  TelefoneInputFormatter(),
-                ],
-                validator: (value) {
-                  String pattern = r'(^\([0-9]{2}\) (?:9)?[0-9]{4}\-[0-9]{4}$)';
-                  RegExp regExp = RegExp(pattern);
-                  if (value != null) {
-                    if (value.isNotEmpty && !regExp.hasMatch(value)) {
-                      return 'Please enter valid mobile number';
-                    }
-                  }
-                  return null;
-                },
-                onChanged: (v) => setState(
-                      () => _assistido.fone = v,
-                    )),
-            TextFormField(
-                initialValue: _assistido.rg,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    icon: Icon(Icons.assignment_ind),
-                    labelText: "RG ou CNH"),
-                validator: (value) => null,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChanged: (v) => setState(() => _assistido.rg = v)),
-            TextFormField(
-                initialValue: _assistido.cpf,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    icon: Icon(Icons.attribution),
-                    labelText: "CPF"),
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  CpfInputFormatter(),
-                ],
-                autovalidateMode: AutovalidateMode.always,
-                validator: (value) {
-                  if (value != null) {
-                    if ((value.isNotEmpty) && (!isCpf(value))) {
-                      return 'CPF invalido!! Corriga por favor';
-                    }
-                  }
-                  return null;
-                },
-                onChanged: (v) => setState(() => _assistido.cpf = v)),
-            const SizedBox(height: 15),
-            Row(children: [
-              const Icon(Icons.admin_panel_settings, color: Colors.black54),
-              const SizedBox(width: 15),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text(
-                  "Logradouro",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.black54,
-                      decorationColor: Colors.black),
-                ),
-                DropdownButton<String>(
-                  dropdownColor: Theme.of(context).colorScheme.background,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black54,
-                      decorationColor: Colors.black),
-                  items: [
-                    'Rua',
-                    'Avenida',
-                    'Praça',
-                    'Travessa',
-                    'Passarela',
-                    'Vila',
-                    'Via',
-                    'Viaduto',
-                    'Viela',
-                  ].map((String dropDownStringItem) {
-                    return DropdownMenuItem<String>(
-                      value: dropDownStringItem,
-                      child: Text(dropDownStringItem),
-                    );
-                  }).toList(),
-                  onChanged: (String? novoItemSelecionado) {
-                    if (novoItemSelecionado != null) {
-                      _assistido.logradouro = novoItemSelecionado;
-                    }
-                  },
-                  value: _assistido.logradouro.replaceAll(" ", ""),
-                ),
-              ])
-            ]),
-            TextFormField(
-                initialValue: _assistido.endereco,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    icon: Icon(Icons.place),
-                    labelText: "Endereço"),
-                autovalidateMode: AutovalidateMode.always,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor entre com um enderço válido';
-                  } else if (value.length < 4) {
-                    return 'Endereço muito pequeno';
-                  }
-                  return null;
-                },
-                onChanged: (v) => setState(() => _assistido.endereco = v)),
-            TextFormField(
-                initialValue: _assistido.numero,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    icon: Icon(Icons.numbers),
-                    labelText: "Número"),
-                autovalidateMode: AutovalidateMode.always,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor entre com um número';
-                  }
-                  return null;
-                },
-                onChanged: (v) => setState(() => _assistido.numero = v)),
-            TextFormField(
-              initialValue: _assistido.bairro,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  icon: Icon(Icons.south_america_outlined),
-                  labelText: "Bairro"),
-              validator: (value) => null,
-              onChanged: (v) {
-                _assistido.bairro = v;
-              },
-            ),
-            TextFormField(
-                initialValue: _assistido.complemento,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    icon: Icon(Icons.travel_explore),
-                    labelText: "Complemento"),
-                validator: (value) => null,
-                onChanged: (v) => setState(() => _assistido.complemento = v)),
-            TextFormField(
-                initialValue: _assistido.cep,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    icon: Icon(Icons.elevator_sharp),
-                    labelText: "CEP"),
-                validator: (value) => null,
-                onChanged: (v) => setState(() => _assistido.cep = v)),
-            TextFormField(
-                initialValue: _assistido.obs,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    icon: Icon(Icons.check),
-                    labelText: "OBS"),
-                validator: (value) => null,
-                maxLines: 5,
-                onChanged: (v) => setState(() => _assistido.obs = v)),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                    onPressed: _assistido.nomeM1.length > 4
-                        ? () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Assistido Salvo')),
-                              );
-                              if (_isAdd) {
-
-                              } else {
-                                widget.assistido?.copy(_assistido);                                
-                              }
-                              Modular.to.pop();
-                            }
-                          }
-                        : null,
-                    child: const Text("Salvar Aterações")),
-                const SizedBox(width: 10), // give it width
-              ],
+    return TemplatePage(
+      hasProx: null,
+      isLeading: true,
+      answerLenght: 1,
+      header: const Text(
+        'Descritivo Geral',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 26,
+          height: 1.5,
+          color: Colors.white,
+          shadows: <Shadow>[
+            Shadow(
+              offset: Offset(2.0, 2.0),
+              blurRadius: 1.0,
+              color: Color.fromARGB(255, 0, 0, 0),
             ),
           ],
-        );
-      },
+        ),
+      ),
+      itens: (HomeController controller,
+              GlobalKey<FormFieldState<List<ValueNotifier<String>>>> state) =>
+          [
+        const SizedBox(height: 20),
+        Text(
+          'Dados da Família assistida com ${_assistido.nomesMoradores.split(";").length} pessoas:',
+          textAlign: TextAlign.left,
+        ),
+        const SizedBox(height: 20),
+        Table(
+          border: TableBorder.all(),
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: <TableRow>[
+                TableRow(
+                  children: <Widget>[
+                    TableCell(
+                      verticalAlignment: TableCellVerticalAlignment.top,
+                      child: Container(
+                        width: 32,
+                        color: Colors.green,
+                        child: const Text(
+                          "Nome",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      verticalAlignment: TableCellVerticalAlignment.top,
+                      child: Container(
+                        width: 32,
+                        color: Colors.green,
+                        child: const Text(
+                          "Idade",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: <Widget>[
+                    TableCell(
+                      verticalAlignment: TableCellVerticalAlignment.top,
+                      child: Container(
+                        width: 32,
+                        color: Colors.white,
+                        child: Text(
+                          _assistido.nomeM1.split(" ")[0],
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      verticalAlignment: TableCellVerticalAlignment.top,
+                      child: Container(
+                        width: 32,
+                        color: Colors.white,
+                        child: Text(
+                          (DateTime.now().year -
+                                  DateFormat('dd/MM/yyyy')
+                                      .parse(_assistido.dataNascM1)
+                                      .year)
+                              .toString(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ] +
+              montaTabela(),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          '${_assistido.logradouro}: ${_assistido.endereco} nº ${_assistido.numero}, ${_assistido.bairro}\n${_assistido.complemento} CEP.: ${_assistido.cep}',
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 20),
+        const Text(
+          'Dados do Doador:',
+          textAlign: TextAlign.left,
+        ),
+        const SizedBox(height: 20),
+        TextFormField(
+          initialValue: _assistido.nomeDoador,
+          decoration: const InputDecoration(
+            border: UnderlineInputBorder(),
+            icon: Icon(Icons.person),
+            labelText: 'Informe o nome do Doador',
+          ),
+          keyboardType: TextInputType.name,
+          autovalidateMode: AutovalidateMode.always,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Por favor entre com um nome';
+            } else if (value.length < 4) {
+              return 'Nome muito pequeno';
+            }
+            return null;
+          },
+          onChanged: (v) => setState(() => _assistido.nomeDoador = v),
+        ),
+        const SizedBox(height: 15),
+        TextFormField(
+          initialValue: _assistido.telDoador,
+          decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              icon: Icon(Icons.phone),
+              labelText: 'Telefone do Doador'),
+          autovalidateMode: AutovalidateMode.always,
+          keyboardType: TextInputType.phone,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            TelefoneInputFormatter(),
+          ],
+          validator: (value) {
+            String pattern = r'(^\([0-9]{2}\) (?:9)?[0-9]{4}\-[0-9]{4}$)';
+            RegExp regExp = RegExp(pattern);
+            if (value == null || value.isEmpty || !regExp.hasMatch(value)) {
+              return 'Please enter valid mobile number';
+            }
+            return null;
+          },
+          onChanged: (v) => setState(
+            () => _assistido.telDoador = v,
+          ),
+        ),
+        TextFormField(
+            initialValue: _assistido.endDoador,
+            decoration: const InputDecoration(
+                border: UnderlineInputBorder(),
+                icon: Icon(Icons.place),
+                labelText: "Endereço do Doador"),
+            autovalidateMode: AutovalidateMode.always,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Por favor entre com um enderço válido';
+              } else if (value.length < 4) {
+                return 'Endereço muito pequeno';
+              }
+              return null;
+            },
+            onChanged: (v) => setState(() => _assistido.endDoador = v)),
+        const SizedBox(height: 24),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton(
+                onPressed: _assistido.nomeM1.length > 4
+                    ? () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Doador Salvo')),
+                          );
+                          widget.assistido?.insertDoadorFunc();
+                          Modular.to.pop();
+                        }
+                      }
+                    : null,
+                child: const Text("Salvar Aterações")),
+            const SizedBox(width: 10), // give it width
+          ],
+        ),
+      ],
     );
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  List<TableRow> montaTabela() {
+    List<TableRow> resp = <TableRow>[];
+    if (_assistido.nomesMoradores.isNotEmpty) {
+      final aux1 = _assistido.nomesMoradores;
+      final list1 = aux1.substring(0, aux1.length - 1).split(";");
+      final aux2 = _assistido.datasNasc;
+      final list2 = aux2.substring(0, aux2.length - 1).split(";");
+      for (int i = 0; i < list1.length; i++) {
+        resp.add(
+          TableRow(
+            children: <Widget>[
+              TableCell(
+                verticalAlignment: TableCellVerticalAlignment.top,
+                child: Container(
+                  width: 32,
+                  color: Colors.white,
+                  child: Text(
+                    list1[i].split(" ")[0],
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              TableCell(
+                verticalAlignment: TableCellVerticalAlignment.top,
+                child: Container(
+                  width: 32,
+                  color: Colors.white,
+                  child: Text(
+                    (DateTime.now().year -
+                            DateFormat('dd/MM/yyyy').parse(list2[i]).year)
+                        .toString(),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+    return resp;
   }
 
   bool isCpf(String? cpf) {

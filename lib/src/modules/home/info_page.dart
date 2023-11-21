@@ -3,7 +3,7 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import '../../models/parameters.dart';
 import 'home_controller.dart';
 import 'modelsview/single_selection_list.dart';
-import 'template_page.dart';
+import 'modelsview/template_page.dart';
 
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});

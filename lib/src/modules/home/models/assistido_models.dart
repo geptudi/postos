@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Assistido {
   int ident;
   String updatedApps;
@@ -74,13 +76,26 @@ class Assistido {
   }
 
   factory Assistido.fromList(List<dynamic> value) {
+    final int yearNow = DateTime.now().year;
+    final String aux = value[20].toString();
+    final String datanasc = aux.isNotEmpty ?
+        "${aux.substring(0, aux.length - 1).split(";").map<String>((e) {
+      return e.isNotEmpty && e.length <= 3
+          ? DateFormat('dd/MM/yyyy').format(DateTime(yearNow - int.parse(e)))
+          : e;
+    }).join(";")};":"";
+
     return Assistido(
       ident: value[0] as int,
       updatedApps: value[1],
       photoName: value[2].toString(),
       nomeM1: value[3].toString(),
       condicao: value[4].toString(),
-      dataNascM1: value[5].toString(),
+      dataNascM1:
+          value[5].toString().isNotEmpty && value[5].toString().length <= 3
+              ? DateFormat('dd/MM/yyyy')
+                  .format(DateTime(yearNow - int.parse(value[5])))
+              : value[5].toString(),
       estadoCivil: value[6].toString(),
       fone: value[7].toString(),
       rg: value[8].toString(),
@@ -95,34 +110,8 @@ class Assistido {
       chamada: value[17].toString(),
       parentescos: value[18].toString(),
       nomesMoradores: value[19].toString(),
-      datasNasc: value[20].toString(),
+      datasNasc: datanasc,
     );
-  }
-
-void copy(Assistido? assistido) {
-    if (assistido != null) {
-      ident = assistido.ident;
-      updatedApps = assistido.updatedApps;
-      nomeM1 = assistido.nomeM1;
-      photoName = assistido.photoName;
-      condicao = assistido.condicao;
-      dataNascM1 = assistido.dataNascM1;
-      estadoCivil = assistido.estadoCivil;
-      fone = assistido.fone;
-      rg = assistido.rg;
-      cpf = assistido.cpf;
-      logradouro = assistido.logradouro;
-      endereco = assistido.endereco;
-      numero = assistido.numero;
-      bairro = assistido.bairro;
-      complemento = assistido.complemento;
-      cep = assistido.cep;
-      obs = assistido.obs;
-      chamada = assistido.chamada;
-      parentescos = assistido.parentescos;
-      nomesMoradores = assistido.nomesMoradores;
-      datasNasc = assistido.datasNasc;
-    }
   }
 
   void changeItens(String? itens, dynamic datas) {
