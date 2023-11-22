@@ -77,7 +77,8 @@ class Assistido {
 
   factory Assistido.fromList(List<dynamic> value) {
     final int yearNow = DateTime.now().year;
-    final String aux = value[20].toString();
+    final String aux0 = value[5].toString().replaceAll(RegExp(r'[^0-9;\/]'), "");
+    final String aux = value[20].toString().replaceAll(RegExp(r'[^0-9;\/]'), "");
     final String datanasc = aux.isNotEmpty ?
         "${aux.substring(0, aux.length - 1).split(";").map<String>((e) {
       return e.isNotEmpty && e.length <= 3
@@ -92,10 +93,10 @@ class Assistido {
       nomeM1: value[3].toString(),
       condicao: value[4].toString(),
       dataNascM1:
-          value[5].toString().isNotEmpty && value[5].toString().length <= 3
+          aux0.isNotEmpty && aux0.length <= 3
               ? DateFormat('dd/MM/yyyy')
-                  .format(DateTime(yearNow - int.parse(value[5])))
-              : value[5].toString(),
+                  .format(DateTime(yearNow - int.parse(aux0)))
+              : aux0,
       estadoCivil: value[6].toString(),
       fone: value[7].toString(),
       rg: value[8].toString(),

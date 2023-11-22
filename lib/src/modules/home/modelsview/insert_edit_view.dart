@@ -201,7 +201,16 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Doador Salvo')),
                           );
-                          widget.assistido?.insertDoadorFunc();
+                          controller.assistidosStoreList.setItens(
+                              _assistido.ident.toString(),
+                              'Nome do Doador',
+                              [
+                                _assistido.nomeDoador,
+                                _assistido.telDoador,
+                                _assistido.endDoador,
+                              ],
+                              planilha: controller.activeTagButtom.value,
+                              table: "Doador");
                           Modular.to.pop();
                         }
                       }

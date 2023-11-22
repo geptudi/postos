@@ -22,7 +22,8 @@ class AssistidoRemoteStorageRepository
   }
 
   Future<dynamic> sendGet(
-      {String table = "BDados",
+      {String? planilha,
+      String table = "BDados",
       required String func,
       required String type,
       dynamic p1,
@@ -31,6 +32,12 @@ class AssistidoRemoteStorageRepository
     var response = await provider?.get(
       '$baseUrl/macros/s/AKfycbwKiHbY2FQ295UrySD3m8pG_JDJO5c8SFxQG4VQ9eo9pzZQMmEfpAZYKdhVJcNtznGV/exec',
       queryParameters: {
+        "planilha": switch (planilha!) {
+          'Bezerra de Menezes' => '0',
+          'Mãe Zeferina' => '2',
+          'Simão Pedro' => '3',
+          _ => '1',
+        },
         "table": table,
         "func": func,
         "type": type,
@@ -52,10 +59,16 @@ class AssistidoRemoteStorageRepository
   }
 
   @override
-  Future<int?> addData(List<dynamic>? value, {String table = "BDados"}) async {
+  Future<int?> addData(List<dynamic>? value,
+      {String? planilha, String table = "BDados"}) async {
     if (value != null) {
-      return (sendGet(table: table, func: 'add', type: 'data', p1: value)
-          as Future<int?>);
+      return (sendGet(
+        planilha: planilha,
+        table: table,
+        func: 'add',
+        type: 'data',
+        p1: value,
+      ) as Future<int?>);
     }
     return null;
   }
@@ -73,23 +86,17 @@ class AssistidoRemoteStorageRepository
 
   @override
   Future<List<dynamic>?> getDatas(
-      {String table = "BDados",
-      String? planilha,
+      {String? planilha,
+      String table = "BDados",
       String? columnFilter,
       String? valueFilter}) async {
-    final panilhaId = switch (planilha!) {
-      'Bezerra de Menezes' => '0',
-      'Mãe Zeferina' => '2',
-      'Simão Pedro' => '3',
-      _ => '1',
-    };
     List<dynamic>? response = await sendGet(
+        planilha: planilha,
         table: table,
         func: 'get',
         type: 'datas',
-        p1: panilhaId,
-        p2: columnFilter ?? "",
-        p3: valueFilter ?? "");
+        p1: columnFilter ?? "",
+        p2: valueFilter ?? "");
     return response;
     /*if (response != null) {
         if ((response as List).isNotEmpty) {
@@ -100,9 +107,14 @@ class AssistidoRemoteStorageRepository
   }
 
   @override
-  Future<List<dynamic>?> getChanges({String table = "BDados"}) async {
-    List<dynamic>? response =
-        await sendGet(table: table, func: 'get', type: 'changes');
+  Future<List<dynamic>?> getChanges(
+      {String? planilha, String table = "BDados"}) async {
+    List<dynamic>? response = await sendGet(
+      planilha: planilha,
+      table: table,
+      func: 'get',
+      type: 'changes',
+    );
     return response;
     /*if (response != null) {
         if ((response as List).isNotEmpty) {
@@ -113,17 +125,27 @@ class AssistidoRemoteStorageRepository
   }
 
   @override
-  Future<List<dynamic>?> getRow(String rowId, {String table = "BDados"}) async {
-    final List<dynamic> response =
-        await sendGet(func: 'get', type: 'datas', p1: rowId);
+  Future<List<dynamic>?> getRow(String rowId,
+      {String? planilha, String table = "BDados"}) async {
+    final List<dynamic> response = await sendGet(
+      planilha: planilha,
+      table: table,
+      func: 'get',
+      type: 'datas',
+      p1: rowId,
+    );
     return response;
   }
 
   @override
   Future<String?> getFile(String targetDir, String fileName) async {
     if (fileName.isNotEmpty) {
-      final String? response =
-          await sendGet(func: 'get', type: 'file', p1: targetDir, p2: fileName);
+      final String? response = await sendGet(
+        func: 'get',
+        type: 'file',
+        p1: targetDir,
+        p2: fileName,
+      );
       return response;
     }
     return null;
@@ -131,9 +153,30 @@ class AssistidoRemoteStorageRepository
 
   @override
   Future<String?> setData(String rowsId, List<dynamic> data,
-      {String table = "BDados"}) async {
+      {String? planilha, String table = "BDados"}) async {
     final String? response = await sendGet(
-        table: table, func: 'set', type: 'data', p1: rowsId, p2: data);
+      planilha: planilha,
+      table: table,
+      func: 'set',
+      type: 'data',
+      p1: rowsId,
+      p2: data,
+    );
+    return response;
+  }
+
+  @override
+  Future<String?> setItens(String rowsId, String columnId, List<dynamic> data,
+      {String? planilha, String table = "BDados"}) async {
+    final String? response = await sendGet(
+      planilha: planilha,
+      table: table,
+      func: 'set',
+      type: 'itens',
+      p1: rowsId,
+      p2: columnId,
+      p3: data,
+    );
     return response;
   }
 
@@ -150,16 +193,26 @@ class AssistidoRemoteStorageRepository
   }
 
   @override
-  Future<dynamic> deleteData(String row, {String table = "BDados"}) async {
-    final response =
-        await sendGet(table: table, func: 'del', type: 'data', p1: row);
+  Future<dynamic> deleteData(String row,
+      {String? planilha, String table = "BDados"}) async {
+    final response = await sendGet(
+      planilha: planilha,
+      table: table,
+      func: 'del',
+      type: 'data',
+      p1: row,
+    );
     return response;
   }
 
   @override
   Future<dynamic> deleteFile(String targetDir, String fileName) async {
-    final dynamic response =
-        await sendGet(func: 'del', type: 'file', p1: targetDir, p2: fileName);
+    final dynamic response = await sendGet(
+      func: 'del',
+      type: 'file',
+      p1: targetDir,
+      p2: fileName,
+    );
     return response;
   }
 }
