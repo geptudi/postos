@@ -93,18 +93,31 @@ class _InfoPageState extends State<InfoPage> {
               valueListenable: controller.answerAux.value[0],
               builder:
                   (BuildContext context, String activeTag, Widget? child) =>
-                      Text(
-                textAlign: TextAlign.center,
-                controller.activeTagButtom.value == ""
-                    ? ""
-                    : """
+                      Column(
+                children: [
+                  Text(
+                    textAlign: TextAlign.center,
+                    controller.activeTagButtom.value == ""
+                        ? ""
+                        : """
 Posto de Assistência Espírita ${controller.activeTagButtom.value} 
 ${postos[controller.activeTagButtom.value]![0]}
 ${postos[controller.activeTagButtom.value]![1]}
 ${postos[controller.activeTagButtom.value]![2]}, e
 ${postos[controller.activeTagButtom.value]![3]}
 """,
-                style: const TextStyle(color: Colors.red, fontSize: 15.0),
+                    style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                  ),
+                  Text(
+                    textAlign: TextAlign.center,
+                    controller.activeTagButtom.value == ""
+                        ? ""
+                        : """
+${postos[controller.activeTagButtom.value]![4]}
+""",
+                    style: const TextStyle(color: Colors.red, fontSize: 15.0),
+                  ),                  
+                ],
               ),
             ),
             const Text(

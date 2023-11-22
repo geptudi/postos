@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:intl/intl.dart';
+import '../../../models/parameters.dart';
 import '../home_controller.dart';
 import '../models/doador_assistido_model.dart';
 import 'template_page.dart';
@@ -123,6 +124,34 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
           '${_assistido.logradouro}: ${_assistido.endereco} nº ${_assistido.numero}, ${_assistido.bairro}\n${_assistido.complemento} CEP.: ${_assistido.cep}',
           textAlign: TextAlign.center,
         ),
+        const SizedBox(height: 20),        
+        const Text(
+          'Dados do posto:',
+          textAlign: TextAlign.left,
+        ),        
+        const SizedBox(height: 20),
+        Text(
+          textAlign: TextAlign.center,
+          controller.activeTagButtom.value == ""
+              ? ""
+              : """
+Posto de Assistência Espírita ${controller.activeTagButtom.value} 
+${postos[controller.activeTagButtom.value]![0]}
+${postos[controller.activeTagButtom.value]![1]}
+${postos[controller.activeTagButtom.value]![2]}, e
+${postos[controller.activeTagButtom.value]![3]}
+""",
+          style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+        ),
+        Text(
+          textAlign: TextAlign.center,
+          controller.activeTagButtom.value == ""
+              ? ""
+              : """
+${postos[controller.activeTagButtom.value]![4]}
+""",
+          style: const TextStyle(color: Colors.red, fontSize: 15.0),
+        ),
         const SizedBox(height: 20),
         const Text(
           'Dados do Doador:',
@@ -204,20 +233,19 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
+                        onPressed: _assistido.nomeDoador.isNotEmpty
+                            ? () async {
+                                await _confirmaClear(context, controller);
+                                Modular.to.pop();
+                              }
+                            : null,
+                        child: const Text("Excluir Doador")),
+                    const SizedBox(width: 10), // give it width
+                    ElevatedButton(
                         onPressed: _formKey.currentState?.validate() ?? false
                             ? () async {
                                 _formKey.currentState!.save();
-                                controller.assistidosStoreList.setItens(
-                                    _assistido.nomeM1.toString(),
-                                    'Nome do Doador',
-                                    [
-                                      _assistido.nomeDoador,
-                                      _assistido.telDoador,
-                                      _assistido.endDoador,
-                                    ],
-                                    planilha: controller.activeTagButtom.value,
-                                    table: "Doador");
-                                widget.assistido?.copy(_assistido);
+                                await save(controller);
                                 Modular.to.pop();
                               }
                             : null,
@@ -231,6 +259,55 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
         ),
       ],
     );
+  }
+
+  Future<void> _confirmaClear(
+      BuildContext context, HomeController controller) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          title: const Text("Atenção !!!"),
+          titleTextStyle: const TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
+          actionsOverflowButtonSpacing: 20,
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Modular.to.pop();
+                },
+                child: const Text("Cancelar")),
+            ElevatedButton(
+                onPressed: () async {
+                  _assistido.nomeDoador = "";
+                  _assistido.telDoador = "";
+                  _assistido.endDoador = "";
+                  _formKey.currentState!.save();
+                  await save(controller);
+                  Modular.to.pop();
+                },
+                child: const Text("Confirmar")),
+          ],
+          content: const Text(
+              "Você realmente deseja excluir o Doador para esta família ?"),
+        );
+      },
+    );
+  }
+
+  Future<void> save(HomeController controller) async {
+    controller.assistidosStoreList.setItens(
+        _assistido.nomeM1.toString(),
+        'Nome do Doador',
+        [
+          _assistido.nomeDoador,
+          _assistido.telDoador,
+          _assistido.endDoador,
+        ],
+        planilha: controller.activeTagButtom.value,
+        table: "Doador");
+    widget.assistido?.copy(_assistido);
   }
 
   @override
