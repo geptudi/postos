@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<bool> init() async {
+    _controller.doadorCount.value = 0;    
     final response1 = await _controller.assistidosStoreList.getDatas(
         planilha: _controller.activeTagButtom.value,
         table: "BDados",
