@@ -51,9 +51,42 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
               GlobalKey<FormFieldState<List<ValueNotifier<String>>>> state) =>
           [
         const SizedBox(height: 20),
-        Text(
-          'Dados da Família assistida com ${_assistido.nomesMoradores.split(";").length} pessoas:',
-          textAlign: TextAlign.left,
+        Row(
+          children: [
+            Text(
+              'Dados da Família assistida com ${_assistido.nomesMoradores.split(";").length} pessoas:',
+              textAlign: TextAlign.left,
+            ),
+            const Spacer(),
+            IconButton(
+                tooltip: "Copia todas as informações desta tela",
+                onPressed: () async {
+                  await Clipboard.setData(
+                    ClipboardData(text: """
+OSGEPT - Obras Sociais do Grupo Espírita Paulo de Tarso
+
+Dados da Família assistida com ${_assistido.nomesMoradores.split(";").length} pessoas:
+
+Nome\t-\tIdade
+${_assistido.nomeM1.split(" ")[0]}\t-\t${(DateTime.now().year - DateFormat('dd/MM/yyyy').parse(_assistido.dataNascM1).year).toString()}
+${montaString()}
+
+${_assistido.logradouro}: ${_assistido.endereco} nº ${_assistido.numero}, ${_assistido.bairro}\n${_assistido.complemento} CEP.: ${_assistido.cep}
+       
+Dados do posto:
+         
+Posto de Assistência Espírita ${controller.activeTagButtom.value} 
+${postos[controller.activeTagButtom.value]![0]}
+${postos[controller.activeTagButtom.value]![1]}
+${postos[controller.activeTagButtom.value]![2]}, e
+${postos[controller.activeTagButtom.value]![3]}
+
+${postos[controller.activeTagButtom.value]![4]}
+"""),
+                  );
+                },
+                icon: const Icon(Icons.copy_all_outlined))
+          ],
         ),
         const SizedBox(height: 20),
         Table(
@@ -124,11 +157,11 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
           '${_assistido.logradouro}: ${_assistido.endereco} nº ${_assistido.numero}, ${_assistido.bairro}\n${_assistido.complemento} CEP.: ${_assistido.cep}',
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 20),        
+        const SizedBox(height: 20),
         const Text(
           'Dados do posto:',
           textAlign: TextAlign.left,
-        ),        
+        ),
         const SizedBox(height: 20),
         Text(
           textAlign: TextAlign.center,
@@ -235,7 +268,7 @@ ${postos[controller.activeTagButtom.value]![4]}
                     ElevatedButton(
                         onPressed: _assistido.nomeDoador.isNotEmpty
                             ? () async {
-                                await _confirmaClear(context, controller);
+                                await _confirmaClear(context, controller);                           
                                 Modular.to.pop();
                               }
                             : null,
@@ -246,6 +279,7 @@ ${postos[controller.activeTagButtom.value]![4]}
                             ? () async {
                                 _formKey.currentState!.save();
                                 await save(controller);
+                                controller.doadorCount.value++;
                                 Modular.to.pop();
                               }
                             : null,
@@ -285,6 +319,7 @@ ${postos[controller.activeTagButtom.value]![4]}
                   _assistido.endDoador = "";
                   _formKey.currentState!.save();
                   await save(controller);
+                  controller.doadorCount.value--;                       
                   Modular.to.pop();
                 },
                 child: const Text("Confirmar")),
@@ -353,6 +388,20 @@ ${postos[controller.activeTagButtom.value]![4]}
             ],
           ),
         );
+      }
+    }
+    return resp;
+  }
+
+String montaString() {
+    String resp = "";
+    if (_assistido.nomesMoradores.isNotEmpty) {
+      final aux1 = _assistido.nomesMoradores;
+      final list1 = aux1.substring(0, aux1.length - 1).split(";");
+      final aux2 = _assistido.datasNasc;
+      final list2 = aux2.substring(0, aux2.length - 1).split(";");
+      for (int i = 0; i < list1.length; i++) {
+        resp = '$resp${list1[i].split(" ")[0]}\t-\t${(DateTime.now().year - DateFormat('dd/MM/yyyy').parse(list2[i]).year).toString()}\n';
       }
     }
     return resp;

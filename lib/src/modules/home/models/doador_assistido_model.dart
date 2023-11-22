@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'assistido_models.dart';
 
 class DoadorAssistido extends Assistido {
@@ -13,21 +15,27 @@ class DoadorAssistido extends Assistido {
       {this.nomeDoador = "", this.telDoador = "", this.endDoador = ""})
       : super(nomeM1: "Nome", logradouro: "Rua", endereco: "", numero: "0");
 
-
   Assistido get assistido => this;
+
+  final StreamController<bool> _doadorController =
+      StreamController<bool>.broadcast();
+  Stream<bool> get doadorStream => _doadorController.stream;
 
   @override
   void changeItens(String? itens, dynamic datas) {
     if (itens != null && datas != null) {
       switch (itens) {
         case 'nomeDoador':
-          nomeDoador = datas;         
+          nomeDoador = datas;
+          _doadorController.sink.add(true);
           break;
         case 'telDoador':
-          telDoador = datas;        
+          telDoador = datas;
+          _doadorController.sink.add(true);
           break;
         case 'endDoador':
           endDoador = datas;
+          _doadorController.sink.add(true);
           break;
         default:
           super.changeItens(itens, datas);
@@ -62,6 +70,7 @@ class DoadorAssistido extends Assistido {
       nomeDoador = assistido.nomeDoador;
       telDoador = assistido.telDoador;
       endDoador = assistido.endDoador;
+      _doadorController.sink.add(true);
     }
   }
 

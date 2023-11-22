@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'repositories/assistido_gsheet_repository.dart';
 
 class HomeController {
+  final doadorCount = ValueNotifier<int>(0);  
   final answer = ValueNotifier<List<String>>([]);  
   final answerAux = ValueNotifier<List<ValueNotifier<String>>>([]);  
   final ValueNotifier<String> activeTagButtom = ValueNotifier<String>('');

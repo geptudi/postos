@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
+import 'package:rx_notifier/rx_notifier.dart';
 import '../../models/styles.dart';
 import 'home_controller.dart';
 import 'package:badges/badges.dart' as bg;
@@ -24,10 +25,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<bool> init() async {
-    final response1 = await _controller.assistidosStoreList.getDatas(planilha: _controller.activeTagButtom.value,
-        table: "BDados", columnFilter: 'Condição', valueFilter: 'ATIVO');
-    final response2 =
-        await _controller.assistidosStoreList.getDatas(planilha:_controller.activeTagButtom.value, table: "Doador");
+    final response1 = await _controller.assistidosStoreList.getDatas(
+        planilha: _controller.activeTagButtom.value,
+        table: "BDados",
+        columnFilter: 'Condição',
+        valueFilter: 'ATIVO');
+    final response2 = await _controller.assistidosStoreList
+        .getDatas(planilha: _controller.activeTagButtom.value, table: "Doador");
     if (response1 != null &&
         response1.isNotEmpty &&
         response2 != null &&
@@ -39,6 +43,9 @@ class _HomePageState extends State<HomePage> {
             value2: response2[index],
           ),
         );
+        if (((response2[index][1] ?? "") as String).isNotEmpty) {
+          _controller.doadorCount.value++;
+        }
       }
     }
     return true;
@@ -56,9 +63,12 @@ class _HomePageState extends State<HomePage> {
         header: bg.Badge(
           badgeStyle: const bg.BadgeStyle(badgeColor: Colors.red),
           position: bg.BadgePosition.topStart(top: 0),
-          badgeContent: const Text(
-            '53',
-            style: TextStyle(color: Colors.white, fontSize: 10.0),
+          badgeContent: ValueListenableBuilder(
+            valueListenable: _controller.doadorCount,
+            builder: (BuildContext context, int count, _) => Text(
+              '${assistidoList.length-count}',
+              style: const TextStyle(color: Colors.white, fontSize: 10.0),
+            ),
           ),
           child: Text(
             'Cestas Natalinas do Posto ${_controller.activeTagButtom.value}',
@@ -84,7 +94,12 @@ class _HomePageState extends State<HomePage> {
                     .map<Widget>(
                       (pessoa) => Column(
                         children: <Widget>[
-                          row(pessoa),
+                          StreamBuilder<bool>(
+                              initialData: false,
+                              stream: pessoa.doadorStream,
+                              builder: (BuildContext context,
+                                      AsyncSnapshot<bool> assistidoList) =>
+                                  row(pessoa)),
                           Container(
                             height: 1,
                             color: Styles.linhaProdutoDivisor,
@@ -117,53 +132,75 @@ class _HomePageState extends State<HomePage> {
             : calculateAge(DateFormat('dd/MM/yyyy').parse(e));
       },
     ).toList();
-    return SafeArea(
-      top: false,
-      bottom: false,
-      minimum: const EdgeInsets.only(
-        left: 16,
-        top: 8,
-        bottom: 8,
-        right: 8,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: pessoa.nomeDoador.isNotEmpty ? Colors.green : null,
       ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Família com ${aux.length} moradores',
-                    style: Styles.linhaProdutoNomeDoItem,
-                  ),
-                  const Padding(padding: EdgeInsets.only(top: 8)),
-                  Text(
-                    '${aux.where((e) => e < 12).length} - Crianças\n${aux.where((e) => (e >= 12 && e <= 18)).length} - Adolescente(s) e\n${aux.where((e) => e > 18).length} - Adultos',
-                    style: Styles.linhaProdutoPrecoDoItem,
-                  )
-                ],
+      child: SafeArea(
+        top: false,
+        bottom: false,
+        minimum: const EdgeInsets.only(
+          left: 16,
+          top: 8,
+          bottom: 8,
+          right: 8,
+        ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: pessoa.nomeDoador.isNotEmpty
+                      ? <Widget>[
+                          const Text(
+                            'Família adotada por:',
+                            style: Styles.linhaProdutoNomeDoItem,
+                          ),
+                          const Padding(padding: EdgeInsets.only(top: 8)),
+                          Text(
+                            pessoa.nomeDoador,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ]
+                      : <Widget>[
+                          Text(
+                            'Família com ${aux.length} moradores',
+                            style: Styles.linhaProdutoNomeDoItem,
+                          ),
+                          const Padding(padding: EdgeInsets.only(top: 8)),
+                          Text(
+                            '${aux.where((e) => e < 12).length} - Crianças\n${aux.where((e) => (e >= 12 && e <= 18)).length} - Adolescente(s) e\n${aux.where((e) => e > 18).length} - Adultos',
+                            style: Styles.linhaProdutoPrecoDoItem,
+                          )
+                        ],
+                ),
               ),
             ),
-          ),
-          CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: () => Modular.to.pushNamed(
-              'insert',
-              arguments: {
-                "assistido": pessoa,
-              },
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => Modular.to.pushNamed(
+                'insert',
+                arguments: {
+                  "assistido": pessoa,
+                },
+              ),
+              child: const Icon(
+                Icons.edit,
+                size: 30.0,
+                color: Colors.blue,
+                semanticLabel: 'Edit',
+              ),
             ),
-            child: const Icon(
-              Icons.edit,
-              size: 30.0,
-              color: Colors.blue,
-              semanticLabel: 'Edit',
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
