@@ -172,12 +172,12 @@ class _HomePageState extends State<HomePage> {
                         ]
                       : <Widget>[
                           Text(
-                            'Família com ${aux.length} moradores',
+                            'Família com ${aux.length} moradores, de\n${pessoa.nomeM1}, ',
                             style: Styles.linhaProdutoNomeDoItem,
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           Text(
-                            '${aux.where((e) => e < 12).length} - Crianças\n${aux.where((e) => (e >= 12 && e <= 18)).length} - Adolescente(s) e\n${aux.where((e) => e > 18).length} - Adultos',
+                            '${aux.where((e) => e < 12).length} - Crianças\n${aux.where((e) => (e >= 12 && e <= 18)).length} - Adolescente(s) e\n${aux.where((e) => e > 18).length} - Adultos\n',
                             style: Styles.linhaProdutoPrecoDoItem,
                           )
                         ],
