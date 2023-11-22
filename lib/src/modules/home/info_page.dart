@@ -19,7 +19,7 @@ class _InfoPageState extends State<InfoPage> {
   void initState() {
     super.initState();
     _controllerYoutube = YoutubePlayerController.fromVideoId(
-      videoId: 'CSOR7F6X4EU',
+      videoId: '2OTMsrmyGvA',
       autoPlay: false,
       params: const YoutubePlayerParams(
         showControls: true,
