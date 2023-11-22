@@ -54,7 +54,7 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
         Row(
           children: [
             Text(
-              'Dados da Família assistida com ${_assistido.nomesMoradores.split(";").length} pessoas:',
+              'Dados da Família assistida com ${_assistido.nomesMoradores.length + 1} pessoas:',
               textAlign: TextAlign.left,
             ),
             const Spacer(),
@@ -65,7 +65,7 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
                     ClipboardData(text: """
 OSGEPT - Obras Sociais do Grupo Espírita Paulo de Tarso
 
-Dados da Família assistida com ${_assistido.nomesMoradores.split(";").length} pessoas:
+Dados da Família assistida com ${_assistido.nomesMoradores.length + 1} pessoas:
 
 Nome\t-\tIdade
 ${_assistido.nomeM1.split(" ")[0]}\t-\t${(DateTime.now().year - DateFormat('dd/MM/yyyy').parse(_assistido.dataNascM1).year).toString()}
@@ -268,7 +268,7 @@ ${postos[controller.activeTagButtom.value]![4]}
                     ElevatedButton(
                         onPressed: _assistido.nomeDoador.isNotEmpty
                             ? () async {
-                                await _confirmaClear(context, controller);                           
+                                await _confirmaClear(context, controller);
                                 Modular.to.pop();
                               }
                             : null,
@@ -319,7 +319,7 @@ ${postos[controller.activeTagButtom.value]![4]}
                   _assistido.endDoador = "";
                   _formKey.currentState!.save();
                   await save(controller);
-                  controller.doadorCount.value--;                       
+                  controller.doadorCount.value--;
                   Modular.to.pop();
                 },
                 child: const Text("Confirmar")),
@@ -353,10 +353,8 @@ ${postos[controller.activeTagButtom.value]![4]}
   List<TableRow> montaTabela() {
     List<TableRow> resp = <TableRow>[];
     if (_assistido.nomesMoradores.isNotEmpty) {
-      final aux1 = _assistido.nomesMoradores;
-      final list1 = aux1.substring(0, aux1.length - 1).split(";");
-      final aux2 = _assistido.datasNasc;
-      final list2 = aux2.substring(0, aux2.length - 1).split(";");
+      final list1 = _assistido.nomesMoradores;
+      final list2 = _assistido.datasNasc;
       for (int i = 0; i < list1.length; i++) {
         resp.add(
           TableRow(
@@ -393,15 +391,14 @@ ${postos[controller.activeTagButtom.value]![4]}
     return resp;
   }
 
-String montaString() {
+  String montaString() {
     String resp = "";
     if (_assistido.nomesMoradores.isNotEmpty) {
-      final aux1 = _assistido.nomesMoradores;
-      final list1 = aux1.substring(0, aux1.length - 1).split(";");
-      final aux2 = _assistido.datasNasc;
-      final list2 = aux2.substring(0, aux2.length - 1).split(";");
+      final list1 = _assistido.nomesMoradores;
+      final list2 = _assistido.datasNasc;
       for (int i = 0; i < list1.length; i++) {
-        resp = '$resp${list1[i].split(" ")[0]}\t-\t${(DateTime.now().year - DateFormat('dd/MM/yyyy').parse(list2[i]).year).toString()}\n';
+        resp =
+            '$resp${list1[i].split(" ")[0]}\t-\t${(DateTime.now().year - DateFormat('dd/MM/yyyy').parse(list2[i]).year).toString()}\n';
       }
     }
     return resp;

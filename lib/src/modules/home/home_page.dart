@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
           badgeContent: ValueListenableBuilder(
             valueListenable: _controller.doadorCount,
             builder: (BuildContext context, int count, _) => Text(
-              '${assistidoList.length-count}',
+              '${assistidoList.length - count}',
               style: const TextStyle(color: Colors.white, fontSize: 10.0),
             ),
           ),
@@ -122,13 +122,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget row(DoadorAssistido pessoa) {
-    var st = pessoa.datasNasc.substring(
-        0, pessoa.datasNasc.isEmpty ? 0 : pessoa.datasNasc.length - 1);
-    var aux = ([pessoa.dataNascM1] + st.split(';')).map(
+    final aux = ([pessoa.dataNascM1] + pessoa.datasNasc).map(
       (e) {
-        return e == ""
-            ? calculateAge(DateFormat('dd/MM/yyyy').parse("01/01/1900"))
-            : calculateAge(DateFormat('dd/MM/yyyy').parse(e));
+        return e == "" ? 0 : calculateAge(DateFormat('dd/MM/yyyy').parse(e));
       },
     ).toList();
     return Container(

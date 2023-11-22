@@ -20,8 +20,8 @@ class Assistido {
   String obs;
   String chamada;
   String parentescos;
-  String nomesMoradores;
-  String datasNasc;
+  List<String> nomesMoradores;
+  List<String> datasNasc;
 
   Assistido({
     this.ident = -1,
@@ -43,8 +43,8 @@ class Assistido {
     this.obs = "",
     this.chamada = "",
     this.parentescos = "",
-    this.nomesMoradores = "",
-    this.datasNasc = "",
+    this.nomesMoradores = const [],
+    this.datasNasc = const [],
   });
 
   Assistido.assistido(Assistido assistido)
@@ -77,14 +77,33 @@ class Assistido {
 
   factory Assistido.fromList(List<dynamic> value) {
     final int yearNow = DateTime.now().year;
-    final String aux0 = value[5].toString().replaceAll(RegExp(r'[^0-9;\/]'), "");
-    final String aux = value[20].toString().replaceAll(RegExp(r'[^0-9;\/]'), "");
-    final String datanasc = aux.isNotEmpty ?
-        "${aux.substring(0, aux.length - 1).split(";").map<String>((e) {
-      return e.isNotEmpty && e.length <= 3
-          ? DateFormat('dd/MM/yyyy').format(DateTime(yearNow - int.parse(e)))
-          : e;
-    }).join(";")};":"";
+    final String aux0 =
+        value[5].toString().replaceAll(RegExp(r'[^0-9;\/]'), "");
+    final String tst =
+        value[20].toString().replaceAll(RegExp(r'[^0-9;\/]'), "");
+    final List<String> aux1 = tst.isEmpty
+        ? []
+        : tst.substring(tst.length - 1) == ";" &&
+                tst.substring(tst.length - 2) != ";"
+            ? tst.substring(0, tst.length - 1).split(";")
+            : tst.split(";");
+
+    final List<String> datanasc = aux1.map((e) {
+      return e.isEmpty
+          ? DateFormat('dd/MM/yyyy').format(DateTime.now())
+          : e.length <= 3
+              ? DateFormat('dd/MM/yyyy')
+                  .format(DateTime(yearNow - int.parse(e)))
+              : e;
+    }).toList();
+
+    final String morad = value[19].toString();
+    final List<String> moradores = morad.isEmpty
+        ? []
+        : morad.substring(morad.length - 1) == ";" &&
+                tst.substring(tst.length - 2) != ";"
+            ? morad.substring(0, morad.length - 1).split(";")
+            : morad.split(";");
 
     return Assistido(
       ident: value[0] as int,
@@ -92,8 +111,9 @@ class Assistido {
       photoName: value[2].toString(),
       nomeM1: value[3].toString(),
       condicao: value[4].toString(),
-      dataNascM1:
-          aux0.isNotEmpty && aux0.length <= 3
+      dataNascM1: aux0.isEmpty
+          ? DateFormat('dd/MM/yyyy').format(DateTime.now())
+          : aux0.length <= 3
               ? DateFormat('dd/MM/yyyy')
                   .format(DateTime(yearNow - int.parse(aux0)))
               : aux0,
@@ -110,7 +130,7 @@ class Assistido {
       obs: value[16].toString(),
       chamada: value[17].toString(),
       parentescos: value[18].toString(),
-      nomesMoradores: value[19].toString(),
+      nomesMoradores: moradores,
       datasNasc: datanasc,
     );
   }
