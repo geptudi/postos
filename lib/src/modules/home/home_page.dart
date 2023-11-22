@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
-import 'package:rx_notifier/rx_notifier.dart';
 import '../../models/styles.dart';
 import 'home_controller.dart';
 import 'package:badges/badges.dart' as bg;
