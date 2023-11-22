@@ -70,11 +70,10 @@ class _InfoPageState extends State<InfoPage> {
               style: TextStyle(color: Colors.black, fontSize: 16.0),
             ),
             SingleSelectionList(
-              answer: controller.answerAux.value[0]
+              answer: controller.activeTagButtom
                 ..addListener(() {
-                  state.currentState!.didChange(controller.answerAux.value);
-                  controller.activeTagButtom.value =
-                      controller.answerAux.value[0].value;
+                  state.currentState!.didChange(
+                      <ValueNotifier<String>>[controller.activeTagButtom]);
                 }),
               hasPrefiroNaoDizer: false,
               options: const [
@@ -91,7 +90,7 @@ class _InfoPageState extends State<InfoPage> {
               style: TextStyle(color: Colors.black, fontSize: 15.0),
             ),
             ValueListenableBuilder(
-              valueListenable: controller.activeTagButtom,
+              valueListenable: controller.answerAux.value[0],
               builder:
                   (BuildContext context, String activeTag, Widget? child) =>
                       Text(

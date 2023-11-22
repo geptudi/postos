@@ -194,25 +194,23 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             ElevatedButton(
-                onPressed: _assistido.nomeM1.length > 4
+                onPressed: _formKey.currentState!.validate()
                     ? () async {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Doador Salvo')),
-                          );
-                          controller.assistidosStoreList.setItens(
-                              _assistido.ident.toString(),
-                              'Nome do Doador',
-                              [
-                                _assistido.nomeDoador,
-                                _assistido.telDoador,
-                                _assistido.endDoador,
-                              ],
-                              planilha: controller.activeTagButtom.value,
-                              table: "Doador");
-                          Modular.to.pop();
-                        }
+                        _formKey.currentState!.save();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Doador Salvo')),
+                        );
+                        controller.assistidosStoreList.setItens(
+                            _assistido.ident.toString(),
+                            'Nome do Doador',
+                            [
+                              _assistido.nomeDoador,
+                              _assistido.telDoador,
+                              _assistido.endDoador,
+                            ],
+                            planilha: controller.activeTagButtom.value,
+                            table: "Doador");
+                        Modular.to.pop();
                       }
                     : null,
                 child: const Text("Salvar Aterações")),
