@@ -128,94 +128,106 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
           'Dados do Doador:',
           textAlign: TextAlign.left,
         ),
-        const SizedBox(height: 20),
-        TextFormField(
-          initialValue: _assistido.nomeDoador,
-          decoration: const InputDecoration(
-            border: UnderlineInputBorder(),
-            icon: Icon(Icons.person),
-            labelText: 'Informe o nome do Doador',
-          ),
-          keyboardType: TextInputType.name,
-          autovalidateMode: AutovalidateMode.always,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Por favor entre com um nome';
-            } else if (value.length < 4) {
-              return 'Nome muito pequeno';
-            }
-            return null;
-          },
-          onChanged: (v) => setState(() => _assistido.nomeDoador = v),
-        ),
-        const SizedBox(height: 15),
-        TextFormField(
-          initialValue: _assistido.telDoador,
-          decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              icon: Icon(Icons.phone),
-              labelText: 'Telefone do Doador'),
-          autovalidateMode: AutovalidateMode.always,
-          keyboardType: TextInputType.phone,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            TelefoneInputFormatter(),
-          ],
-          validator: (value) {
-            String pattern = r'(^\([0-9]{2}\) (?:9)?[0-9]{4}\-[0-9]{4}$)';
-            RegExp regExp = RegExp(pattern);
-            if (value == null || value.isEmpty || !regExp.hasMatch(value)) {
-              return 'Please enter valid mobile number';
-            }
-            return null;
-          },
-          onChanged: (v) => setState(
-            () => _assistido.telDoador = v,
-          ),
-        ),
-        TextFormField(
-            initialValue: _assistido.endDoador,
-            decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                icon: Icon(Icons.place),
-                labelText: "Endereço do Doador"),
-            autovalidateMode: AutovalidateMode.always,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Por favor entre com um enderço válido';
-              } else if (value.length < 4) {
-                return 'Endereço muito pequeno';
-              }
-              return null;
-            },
-            onChanged: (v) => setState(() => _assistido.endDoador = v)),
-        const SizedBox(height: 24),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ElevatedButton(
-                onPressed: _formKey.currentState!.validate()
-                    ? () async {
-                        _formKey.currentState!.save();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Doador Salvo')),
-                        );
-                        controller.assistidosStoreList.setItens(
-                            _assistido.ident.toString(),
-                            'Nome do Doador',
-                            [
-                              _assistido.nomeDoador,
-                              _assistido.telDoador,
-                              _assistido.endDoador,
-                            ],
-                            planilha: controller.activeTagButtom.value,
-                            table: "Doador");
-                        Modular.to.pop();
+        Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.always, //.onUserInteraction,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                TextFormField(
+                  initialValue: _assistido.nomeDoador,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    icon: Icon(Icons.person),
+                    labelText: 'Informe o nome do Doador',
+                  ),
+                  keyboardType: TextInputType.name,
+                  autovalidateMode: AutovalidateMode.always,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor entre com um nome';
+                    } else if (value.length < 4) {
+                      return 'Nome muito pequeno';
+                    }
+                    return null;
+                  },
+                  onChanged: (v) => setState(() => _assistido.nomeDoador = v),
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  initialValue: _assistido.telDoador,
+                  decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      icon: Icon(Icons.phone),
+                      labelText: 'Telefone do Doador'),
+                  autovalidateMode: AutovalidateMode.always,
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    TelefoneInputFormatter(),
+                  ],
+                  validator: (value) {
+                    String pattern =
+                        r'(^\([0-9]{2}\) (?:9)?[0-9]{4}\-[0-9]{4}$)';
+                    RegExp regExp = RegExp(pattern);
+                    if (value == null ||
+                        value.isEmpty ||
+                        !regExp.hasMatch(value)) {
+                      return 'Please enter valid mobile number';
+                    }
+                    return null;
+                  },
+                  onChanged: (v) => setState(
+                    () => _assistido.telDoador = v,
+                  ),
+                ),
+                TextFormField(
+                    initialValue: _assistido.endDoador,
+                    decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        icon: Icon(Icons.place),
+                        labelText: "Endereço do Doador"),
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor entre com um enderço válido';
+                      } else if (value.length < 4) {
+                        return 'Endereço muito pequeno';
                       }
-                    : null,
-                child: const Text("Salvar Aterações")),
-            const SizedBox(width: 10), // give it width
-          ],
+                      return null;
+                    },
+                    onChanged: (v) => setState(() => _assistido.endDoador = v)),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                        onPressed: _formKey.currentState?.validate() ?? false
+                            ? () async {
+                                _formKey.currentState!.save();
+                                controller.assistidosStoreList.setItens(
+                                    _assistido.nomeM1.toString(),
+                                    'Nome do Doador',
+                                    [
+                                      _assistido.nomeDoador,
+                                      _assistido.telDoador,
+                                      _assistido.endDoador,
+                                    ],
+                                    planilha: controller.activeTagButtom.value,
+                                    table: "Doador");
+                                widget.assistido?.copy(_assistido);
+                                Modular.to.pop();
+                              }
+                            : null,
+                        child: const Text("Salvar Aterações")),
+                    const SizedBox(width: 10), // give it width
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
