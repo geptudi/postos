@@ -362,7 +362,7 @@ ${postos[controller.activeTagButtom.value]![4]}
       final list2 = _assistido.datasNasc;
       for (int i = 0; i < list1.length; i++) {
         var aux  = list1[i].split(" ");
-        var nome = aux[0] + (aux.length > 1 ? aux[1]: "");           
+        var nome = '${aux[0]} ${(aux.length > 1 ? aux[1]: "")}';           
         resp.add(
           TableRow(
             children: <Widget>[
