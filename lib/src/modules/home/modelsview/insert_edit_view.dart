@@ -27,6 +27,9 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final aux  = _assistido.nomeM1.split(" ");
+    final nome = aux[0] + (aux.length > 1 ? aux[1]: "");
+
     return TemplatePage(
       hasProx: null,
       isLeading: true,
@@ -72,7 +75,9 @@ ${_assistido.nomeM1.split(" ")[0]}\t-\t${(DateTime.now().year - DateFormat('dd/M
 ${montaString()}
 
 ${_assistido.logradouro}: ${_assistido.endereco} nº ${_assistido.numero}, ${_assistido.bairro}\n${_assistido.complemento} CEP.: ${_assistido.cep}
-       
+
+Telefone: ${_assistido.fone}
+
 Dados do posto:
          
 Posto de Assistência Espírita ${controller.activeTagButtom.value} 
@@ -127,7 +132,7 @@ ${postos[controller.activeTagButtom.value]![4]}
                         width: 32,
                         color: Colors.white,
                         child: Text(
-                          _assistido.nomeM1.split(" ")[0],
+                          nome,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -154,7 +159,7 @@ ${postos[controller.activeTagButtom.value]![4]}
         ),
         const SizedBox(height: 20),
         Text(
-          '${_assistido.logradouro}: ${_assistido.endereco} nº ${_assistido.numero}, ${_assistido.bairro}\n${_assistido.complemento} CEP.: ${_assistido.cep}',
+          '${_assistido.logradouro}: ${_assistido.endereco} nº ${_assistido.numero}, ${_assistido.bairro}\n${_assistido.complemento} CEP.: ${_assistido.cep}\nTelefone: ${_assistido.fone}',
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 20),
@@ -353,9 +358,11 @@ ${postos[controller.activeTagButtom.value]![4]}
   List<TableRow> montaTabela() {
     List<TableRow> resp = <TableRow>[];
     if (_assistido.nomesMoradores.isNotEmpty) {
-      final list1 = _assistido.nomesMoradores;
+      final list1 = _assistido.nomesMoradores;    
       final list2 = _assistido.datasNasc;
       for (int i = 0; i < list1.length; i++) {
+        var aux  = list1[i].split(" ");
+        var nome = aux[0] + (aux.length > 1 ? aux[1]: "");           
         resp.add(
           TableRow(
             children: <Widget>[
@@ -365,7 +372,7 @@ ${postos[controller.activeTagButtom.value]![4]}
                   width: 32,
                   color: Colors.white,
                   child: Text(
-                    list1[i].split(" ")[0],
+                    nome,
                     textAlign: TextAlign.center,
                   ),
                 ),

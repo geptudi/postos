@@ -8,7 +8,7 @@ import '../models/device_info_model.dart';
 
 class AssistidoRemoteStorageRepository
     implements AssistidoRemoteStorageInterface {
-  Dio? provider;
+  late final Dio? provider;
   final String baseUrl = 'https://script.google.com';
   final DeviceInfoModel deviceInfoModel = DeviceInfoModel();
 
