@@ -164,9 +164,9 @@ class _TemplatePageState extends State<TemplatePage> {
             ],
           ),
         ];
-        return SingleChildScrollView(
-          child: Container(
-            color: groundColor,
+        return Container(
+          color: groundColor,
+          child: SingleChildScrollView(
             child: Center(
               child: SizedBox(
                 width: constraints.maxWidth - 2 * tam,
