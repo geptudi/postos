@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<bool> init() async {
-    _controller.doadorCount.value = 0;    
+    _controller.doadorCount.value = 0;
     final response1 = await _controller.assistidosStoreList.getDatas(
         planilha: _controller.activeTagButtom.value,
         table: "BDados",
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
         answerLenght: 1,
         header: bg.Badge(
           badgeStyle: const bg.BadgeStyle(badgeColor: Colors.red),
-          position: bg.BadgePosition.topStart(top: 0),
+          position: bg.BadgePosition.topStart(top: 0, start: 0),
           badgeContent: ValueListenableBuilder(
             valueListenable: _controller.doadorCount,
             builder: (BuildContext context, int count, _) => Text(
