@@ -54,11 +54,11 @@ class _TemplatePageState extends State<TemplatePage> {
       controller.answerAux.value = List.generate(
           widget.answerLenght, (index) => ValueNotifier<String>(""));
     }
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final double tam = typeSpace(constraints.maxWidth);
-        return SingleChildScrollView(
-          child: Container(
+    return SingleChildScrollView(
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final double tam = typeSpace(constraints.maxWidth);
+          return Container(
             padding:
                 EdgeInsets.only(left: tam, top: 10, right: tam, bottom: 10),
             width: constraints.maxWidth,
@@ -176,9 +176,9 @@ class _TemplatePageState extends State<TemplatePage> {
               ],
             ),
             //),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
