@@ -62,6 +62,7 @@ class _TemplatePageState extends State<TemplatePage> {
             padding:
                 EdgeInsets.only(left: tam, top: 10, right: tam, bottom: 10),
             width: constraints.maxWidth,
+            //height: constraints.maxHeight,
             color: groundColor,
             //child: SingleChildScrollView(
             child: Column(
