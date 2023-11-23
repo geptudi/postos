@@ -4,6 +4,11 @@ import 'package:postos/src/models/styles.dart';
 
 import '../home_controller.dart';
 
+double typeSpace(double maxWidth) {
+  const tamDesejado = 500.0;
+  return maxWidth > tamDesejado ? tamDesejado : maxWidth;
+}
+
 class TemplatePage extends StatefulWidget {
   final bool? isLeading;
   final Widget? header;
@@ -49,151 +54,137 @@ class _TemplatePageState extends State<TemplatePage> {
       controller.answerAux.value = List.generate(
           widget.answerLenght, (index) => ValueNotifier<String>(""));
     }
-
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        const double tamDesejado = 500;
-        var elementos = Container(
-          width: constraints.maxWidth > tamDesejado
-              ? tamDesejado
-              : constraints.maxWidth,
-          color: groundColor,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 50, top: 0, right: 50, bottom: 0),
-                child: Card(
-                  color: headerColor, //Colors.green,
-                  elevation: 8,
-                  margin: const EdgeInsets.all(0.0),
-                  shape: const OutlineInputBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                    borderSide: borderSideValue,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      if (widget.isLeading != null)
-                        Padding(
+        return Stack(
+          alignment: AlignmentDirectional.center,
+          children: <Widget>[
+            Container(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              color: groundColor,
+            ),
+            SingleChildScrollView(
+              child: Container(
+                width: typeSpace(constraints.maxWidth),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 50, top: 0, right: 50, bottom: 0),
+                      child: Card(
+                        color: headerColor, //Colors.green,
+                        elevation: 8,
+                        margin: const EdgeInsets.all(0.0),
+                        shape: const OutlineInputBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20)),
+                          borderSide: borderSideValue,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            if (widget.isLeading != null)
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 20, top: 5, right: 20, bottom: 5),
+                                child: IconButton(
+                                  icon: const Icon(Icons.arrow_back_outlined),
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    Modular.to.pop();
+                                  },
+                                ),
+                              ),
+                            if (widget.header != null)
+                              Flexible(
+                                child: Center(child: widget.header!),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 8,
+                        shape: const OutlineInputBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20)),
+                            borderSide: BorderSide(color: Colors.white)),
+                        child: Container(
                           padding: const EdgeInsets.only(
-                              left: 20, top: 5, right: 20, bottom: 5),
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_back_outlined),
-                            color: Colors.white,
-                            onPressed: () {
-                              Modular.to.pop();
+                              left: 20, top: 10, right: 20, bottom: 20),
+                          child: Form(
+                            key: _formKey,
+                            onChanged: () {
+                              if (_formKey.currentState!.validate()) {
+                                List<ValueNotifier<String>> answer =
+                                    formFieldkey.currentState!.value!;
+                                answerNotifier.value = answer;
+                              } else {
+                                answerNotifier.value = [];
+                              }
                             },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            child: FormField<List<ValueNotifier<String>>>(
+                              key: formFieldkey,
+                              initialValue: controller.answerAux.value,
+                              validator: (List<ValueNotifier<String>>? value) {
+                                if (value == null) {
+                                  return 'Por favor responda todas as questões';
+                                } else {
+                                  final count = value
+                                      .where((item) => item.value != "")
+                                      .length;
+                                  if (count != value.length) {
+                                    return 'Por favor responda todas as questões';
+                                  }
+                                }
+                                return (null);
+                              },
+                              builder:
+                                  (FormFieldState<List<ValueNotifier<String>>>
+                                      state) {
+                                List<Widget> itens =
+                                    widget.itens(controller, formFieldkey);
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: itens.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) =>
+                                          itens[index],
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      if (widget.header != null)
-                        Flexible(
-                          child: Center(child: widget.header!),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-              Flexible(
-                child: Card(
-                  color: Colors.white,
-                  elevation: 8,
-                  shape: const OutlineInputBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20)),
-                      borderSide: BorderSide(color: Colors.white)),
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                        left: 20, top: 10, right: 20, bottom: 20),
-                    child: Form(
-                      key: _formKey,
-                      onChanged: () {
-                        if (_formKey.currentState!.validate()) {
-                          List<ValueNotifier<String>> answer =
-                              formFieldkey.currentState!.value!;
-                          answerNotifier.value = answer;
-                        } else {
-                          answerNotifier.value = [];
-                        }
-                      },
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      child: FormField<List<ValueNotifier<String>>>(
-                        key: formFieldkey,
-                        initialValue: controller.answerAux.value,
-                        validator: (List<ValueNotifier<String>>? value) {
-                          if (value == null) {
-                            return 'Por favor responda todas as questões';
-                          } else {
-                            final count =
-                                value.where((item) => item.value != "").length;
-                            if (count != value.length) {
-                              return 'Por favor responda todas as questões';
-                            }
-                          }
-                          return (null);
-                        },
-                        builder: (FormFieldState<List<ValueNotifier<String>>>
-                            state) {
-                          List<Widget> itens =
-                              widget.itens(controller, formFieldkey);
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: itens.length,
-                            itemBuilder: (BuildContext context, int index) =>
-                                itens[index],
-                          );
-                        },
                       ),
                     ),
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  const Spacer(flex: 1),
-                  if (widget.hasProx != null)
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 0, top: 0, right: 10, bottom: 0),
-                      alignment: Alignment.bottomRight,
-                      child: _proximaButton(widget.hasProx!),
-                    ),
-                ],
-              ),
-            ],
-          ),
-        );
-        return constraints.maxWidth > tamDesejado
-            ? SingleChildScrollView(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      color: groundColor,
-                      child: Center(
-                        child: elementos,
-                      ),
+                    Row(
+                      children: [
+                        const Spacer(flex: 1),
+                        if (widget.hasProx != null)
+                          Container(
+                            padding: const EdgeInsets.only(
+                                left: 0, top: 0, right: 10, bottom: 0),
+                            alignment: Alignment.bottomRight,
+                            child: _proximaButton(widget.hasProx!),
+                          ),
+                      ],
                     ),
                   ],
                 ),
-              )
-            : Stack(
-                children: <Widget>[
-                  Container(
-                    color: groundColor,
-                    child: SingleChildScrollView(
-                      child: Center(
-                        child: elementos,
-                      ),
-                    ),
-                  ),
-                ],
-              );
+              ),
+            ),
+          ],
+        );
       },
     );
   }
