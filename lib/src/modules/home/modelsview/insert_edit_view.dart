@@ -28,7 +28,7 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
   @override
   Widget build(BuildContext context) {
     final aux  = _assistido.nomeM1.split(" ");
-    final nome = aux[0] + (aux.length > 1 ? aux[1]: "");
+    final nome = '${aux[0]} ${(aux.length > 1 ? aux[1]: "")}';
 
     return TemplatePage(
       hasProx: null,
