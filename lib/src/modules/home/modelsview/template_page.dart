@@ -69,7 +69,7 @@ class _TemplatePageState extends State<TemplatePage> {
                     child: Card(
                       color: headerColor, //Colors.green,
                       elevation: 8,
-                      margin: const EdgeInsets.all(0.0),
+                      margin: const EdgeInsets.only(top: 5),
                       shape: const OutlineInputBorder(
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(20),
@@ -99,6 +99,7 @@ class _TemplatePageState extends State<TemplatePage> {
                     child: Card(
                       color: Colors.white,
                       elevation: 8,
+                      margin: const EdgeInsets.only(bottom: 5),
                       shape: const OutlineInputBorder(
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(20),
@@ -160,8 +161,7 @@ class _TemplatePageState extends State<TemplatePage> {
                       const Spacer(flex: 1),
                       if (widget.hasProx != null)
                         Container(
-                          padding: const EdgeInsets.only(
-                              left: 0, top: 0, right: 10, bottom: 0),
+                          padding: const EdgeInsets.only(bottom: 5),
                           alignment: Alignment.bottomRight,
                           child: _proximaButton(widget.hasProx!),
                         ),
