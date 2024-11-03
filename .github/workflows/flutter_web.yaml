@@ -24,7 +24,8 @@ jobs:
       - name: Build Web
         run: |
           git config --global init.defaultBranch main
-          flutter build web --release --base-href=/postos/
+          # flutter build web --release --base-href=/postos/
+          flutter build web --wasm --release --base-href=/postos/
 
       - name: Deploy
         run: |

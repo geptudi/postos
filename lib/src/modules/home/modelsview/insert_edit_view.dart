@@ -306,7 +306,7 @@ ${postos[controller.activeTagButtom.value]![4]}
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           title: const Text("Atenção !!!"),
           titleTextStyle: const TextStyle(
               fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),

@@ -1,6 +1,6 @@
-# GEPT Postos de Assistência
+# postos
 
-Lista com os dados das cestas de natal 
+A new Flutter project.
 
 ## Getting Started
 
