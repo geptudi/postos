@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:postos/src/models/styles.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 
 import '../home_controller.dart';
+
+double typeSpace(double maxWidth) {
+  const tamDesejado = 500.0;
+  return ((maxWidth - tamDesejado) > 0 ? (maxWidth - tamDesejado) / 2 : 0);
+}
 
 class TemplatePage extends StatefulWidget {
   final bool? isLeading;
@@ -53,13 +59,15 @@ class _TemplatePageState extends State<TemplatePage> {
     }
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
+        final double tam = typeSpace(constraints.maxWidth);
         return Container(
           color: groundColor,
-          child: Center(
-            child: SizedBox(
-              width: constraints.maxWidth > tamDesejado
-                  ? tamDesejado
-                  : constraints.maxWidth,
+          padding: EdgeInsets.only(left: tam, top: 10, right: tam, bottom: 10),
+          width: constraints.maxWidth > tamDesejado
+              ? tamDesejado
+              : constraints.maxWidth,
+          child: SingleChildScrollView(
+            child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -143,8 +151,8 @@ class _TemplatePageState extends State<TemplatePage> {
                                     state) {
                               List<Widget> itens =
                                   widget.itens(controller, formFieldkey);
-                              return ListView.builder(
-                                //shrinkWrap: true,
+                              return SuperListView.builder(
+                                shrinkWrap: true,
                                 itemCount: itens.length,
                                 itemBuilder:
                                     (BuildContext context, int index) =>
