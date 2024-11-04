@@ -62,7 +62,7 @@ class _TemplatePageState extends State<TemplatePage> {
         final double tam = typeSpace(constraints.maxWidth);
         return Container(
           color: groundColor,
-          padding: EdgeInsets.only(left: tam, top: 10, right: tam, bottom: 10),
+          padding: EdgeInsets.only(left: tam, top: 10, right: tam, bottom: 0),
           width: constraints.maxWidth > tamDesejado
               ? tamDesejado
               : constraints.maxWidth,
