@@ -70,7 +70,7 @@ class _YoutubePageState extends State<YoutubePage> {
             player,
             const Text(
               textAlign: TextAlign.justify,
-              '\nAgora\tque\tvocê\tja\tentendeu\tcomo\tusar,\tretorne\ta\tpagina\tinicial\te\tvenha\tproporcionar\tmuita\talegria\tà\tuma\tfamilia\tcarente.',
+              '\nAgora\tque\tvocê\tja\tentendeu\tcomo\tusar,\tretorne\ta\tpagina\tinicial\te\tvenha\tproporcionar\tmuita\talegria\tà\tuma\tdas\tfamílias\tassistidas.',
               style: TextStyle(color: Colors.black, fontSize: 16.0),
             ),             
           ],
