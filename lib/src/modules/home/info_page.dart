@@ -60,10 +60,24 @@ class _InfoPageState extends State<InfoPage> {
               [
             const Text(
               textAlign: TextAlign.justify,
-              '\nEsta\tpágina\tvisa\tproporcionar\tum\tnatal\tcheio\tde\tmuito\tamor\te\tfraternidade.\n\nAqui\tvocê\tpode\tfazer\ta\tdiferença!!\tVeja\tcomo\té\tsimples!!\n\nBasta\tescolher\tum\tdos\tquatro\t(4)\tpostos\tde\tassistência\tdas\tObras\tSociais\tdo\tGrupo\tEspírita\tPaulo\tde\tTarso,\tnos\tbotões\tabaixo,\tselecionar\tuma\tfamília\tna\tsequência\te\tpreencher\tseus\tdados\tcomo\tdoador.\n\nPronto.\tAgora\tbasta\tsalvar\to\tarquivo\tcom\to\tresumo\tdesta\tfamília.\tNeste\tarquivo\tvocê\tterá\tas\tinformações\tpara\tpoder\tentregar\tpessoalmente\testa\tcesta,\tou\tos\tdados\tdo\tcoordenador\tdo\trespectivo\tposto\tpara\tvocê\talinhar\tcom\tele\tcomo\tserá\testa\tentrega.\n\nPara\tsaber\tmais\tcomo\tusar\testa\tferramenta,\tveja\to\tvideo\tabaixo:\n\n',
+              '\nEsta\tpágina\tvisa\tproporcionar\tum\tnatal\tcheio\tde\tmuito\tamor\te\tfraternidade.\n\nAqui\tvocê\tpode\tfazer\ta\tdiferença!!\tVeja\tcomo\té\tsimples!!\n\nBasta\tescolher\tum\tdos\tquatro\t(4)\tpostos\tde\tassistência\tdas\tObras\tSociais\tdo\tGrupo\tEspírita\tPaulo\tde\tTarso,\tnos\tbotões\tabaixo,\tselecionar\tuma\tfamília\tna\tsequência\te\tpreencher\tseus\tdados\tcomo\tdoador.\n\nPronto.\tAgora\tbasta\tsalvar\to\tarquivo\tcom\to\tresumo\tdesta\tfamília.\tNeste\tarquivo\tvocê\tterá\tas\tinformações\tpara\tpoder\tentregar\tpessoalmente\testa\tcesta,\tou\tos\tdados\tdo\tcoordenador\tdo\trespectivo\tposto\tpara\tvocê\talinhar\tcom\tele\tcomo\tserá\testa\tentrega.\n\nPara\tsaber\tmais\tcomo\tusar\testa\tferramenta,\tveja\to\tvideo\tabaixo:',
               style: TextStyle(color: Colors.black, fontSize: 16.0),
             ),
-            player,
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // Ação quando o botão é pressionado
+                },
+                icon: Icon(Icons.play_circle_filled,
+                    color: Colors.red), // ou use um ícone SVG
+                label: Text('YouTube'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.red,
+                  backgroundColor: Colors.white,
+                ),
+              ),
+            ),
+            //player,
             const Text(
               textAlign: TextAlign.justify,
               '\nPerfeito!!\tAgora\tescolha\to\tposto\tde\tassistência\tque\tdeseja\tajudar:\n',
@@ -106,7 +120,8 @@ ${postos[controller.activeTagButtom.value]![1]}
 ${postos[controller.activeTagButtom.value]![2]}, e
 ${postos[controller.activeTagButtom.value]![3]}
 """,
-                    style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                    style:
+                        const TextStyle(color: Colors.indigo, fontSize: 15.0),
                   ),
                   Text(
                     textAlign: TextAlign.center,
@@ -114,7 +129,7 @@ ${postos[controller.activeTagButtom.value]![3]}
                         ? ""
                         : postos[controller.activeTagButtom.value]![4],
                     style: const TextStyle(color: Colors.red, fontSize: 15.0),
-                  ),                  
+                  ),
                 ],
               ),
             ),
