@@ -24,7 +24,7 @@ class _InfoPageState extends State<InfoPage> {
       hasProx: "home",
       answerLenght: 1,
       header: const Text(
-        'Bem Vindos !!',
+        'Sejam bem vindos!!',
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 26,
