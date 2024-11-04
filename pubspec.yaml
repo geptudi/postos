@@ -29,7 +29,8 @@ dependencies:
   brasil_fields: ^1.15.0
   super_sliver_list: ^0.4.1  
   web: ^1.1.0 
-  url_launcher_web: ^2.3.3     
+  url_launcher_web: ^2.3.3   
+  flutter_svg: ^1.0.3  # Verifique a versão mais recente    
 
 dev_dependencies:
   flutter_test:
