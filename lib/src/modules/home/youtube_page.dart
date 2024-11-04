@@ -17,7 +17,6 @@ class YoutubePage extends StatefulWidget {
 
 class _YoutubePageState extends State<YoutubePage> {
   late YoutubePlayerController _controllerYoutube;
-  final _controller = Modular.get<HomeController>();
 
   @override
   void initState() {
@@ -44,7 +43,7 @@ class _YoutubePageState extends State<YoutubePage> {
           isLeading: true,
           answerLenght: 1,
           header: const Text(
-            'Sobre / Informações:',
+            'Informações:',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 26,
