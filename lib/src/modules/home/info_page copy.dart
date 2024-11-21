@@ -91,7 +91,7 @@ class _InfoPageState extends State<InfoPage> {
                 }),
               hasPrefiroNaoDizer: false,
               options: const [
-                'Bezerra de Menezes',
+                'Fabiano de Cristo',
                 'Eurípedes Barsanulfo',
                 'Mãe Zeferina',
                 'Simão Pedro',

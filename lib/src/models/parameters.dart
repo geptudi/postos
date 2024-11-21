@@ -1,5 +1,5 @@
 const Map<String, List<String>> postos = {
-  'Bezerra de Menezes': <String>[
+  'Fabiano de Cristo': <String>[
     'Rua Abilia Ferreira Diniz nº 105',
     'Bairro: Pacaembu',
     'Coordenador(a)es: Maria do Carmo - 9 9879 4774',
