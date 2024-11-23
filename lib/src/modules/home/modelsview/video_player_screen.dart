@@ -15,6 +15,7 @@ class _VideoPlayerYouTubeStyleScreenState
     extends State<VideoPlayerYouTubeStyleScreen> {
   late VideoPlayerController _controller;
   bool _isPlaying = false;
+  bool _isFullScreen = false;
 
   @override
   void initState() {
@@ -45,13 +46,28 @@ class _VideoPlayerYouTubeStyleScreenState
     });
   }
 
+  void _toggleFullScreen(BuildContext context) {
+    if (_isFullScreen) {
+      Navigator.of(context).pop();
+    } else {
+      Navigator.of(context).push(
+        PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return FullScreenVideoPlayer(controller: _controller);
+          },
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Envolva o Expanded com um Container para definir restrições de tamanho
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.6, // 60% da tela
+        // Vídeo
+        Container(
+          height: MediaQuery.of(context).size.height * 0.6, // 60% da altura da tela
           child: _controller.value.isInitialized
               ? AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
@@ -61,7 +77,7 @@ class _VideoPlayerYouTubeStyleScreenState
                   child: CircularProgressIndicator(),
                 ),
         ),
-        // Controles do vídeo
+        // Controles
         Container(
           color: Colors.black,
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -91,12 +107,10 @@ class _VideoPlayerYouTubeStyleScreenState
               ),
               IconButton(
                 icon: const Icon(
-                  Icons.replay,
+                  Icons.fullscreen,
                   color: Colors.white,
                 ),
-                onPressed: () {
-                  _controller.seekTo(Duration.zero);
-                },
+                onPressed: () => _toggleFullScreen(context),
               ),
             ],
           ),
@@ -109,5 +123,31 @@ class _VideoPlayerYouTubeStyleScreenState
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+}
+
+class FullScreenVideoPlayer extends StatelessWidget {
+  final VideoPlayerController controller;
+
+  const FullScreenVideoPlayer({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pop(); // Sai do fullscreen ao toque
+      },
+      child: Container(
+        color: Colors.black,
+        child: Center(
+          child: controller.value.isInitialized
+              ? AspectRatio(
+                  aspectRatio: controller.value.aspectRatio,
+                  child: VideoPlayer(controller),
+                )
+              : const CircularProgressIndicator(),
+        ),
+      ),
+    );
   }
 }
