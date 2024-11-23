@@ -1,17 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:js/js.dart'; // Para chamadas JavaScript
+import 'package:web/web.dart' as web; // Usando prefixo para o pacote web
 import 'package:video_player/video_player.dart';
 import '../home_controller.dart';
 import 'template_page.dart';
-
-// Métodos JavaScript para fullscreen
-@JS('document.documentElement.requestFullscreen')
-external void enterFullscreen();
-
-@JS('document.exitFullscreen')
-external void exitFullscreen();
 
 class VideoPlayerYouTubeStyleScreen extends StatefulWidget {
   const VideoPlayerYouTubeStyleScreen({super.key});
@@ -72,12 +65,27 @@ class _VideoPlayerYouTubeStyleScreenState
     _hideControlsTimer?.cancel();
   }
 
-  void _enterBrowserFullscreen() {
-    enterFullscreen(); // Chama o método JavaScript para fullscreen
+  Future<void> _enterBrowserFullscreen() async {
+    try {
+      final document = web.window.document;
+      final element = document.documentElement;
+      if (element != null) {
+        element.requestFullscreen();
+      }
+    } catch (e) {
+      debugPrint('Erro ao entrar no modo fullscreen: $e');
+    }
   }
 
-  void _exitBrowserFullscreen() {
-    exitFullscreen(); // Chama o método JavaScript para sair do fullscreen
+  Future<void> _exitBrowserFullscreen() async {
+    try {
+      final document = web.window.document;
+      if (document.fullscreenElement != null) {
+        document.exitFullscreen();
+      }
+    } catch (e) {
+      debugPrint('Erro ao sair do modo fullscreen: $e');
+    }
   }
 
   @override
@@ -280,7 +288,8 @@ class _VideoPlayerYouTubeStyleScreenState
     );
   }
 
-  String _formatDuration(Duration duration) {
+  String _formatDuration(Duration? duration) {
+    if (duration == null) return '00:00'; // Valor padrão para duração nula
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
