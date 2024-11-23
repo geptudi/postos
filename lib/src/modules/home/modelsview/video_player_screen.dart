@@ -1,9 +1,17 @@
-import 'dart:html' as html;
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:js/js.dart'; // Para chamadas JavaScript
 import 'package:video_player/video_player.dart';
 import '../home_controller.dart';
 import 'template_page.dart';
+
+// Métodos JavaScript para fullscreen
+@JS('document.documentElement.requestFullscreen')
+external void enterFullscreen();
+
+@JS('document.exitFullscreen')
+external void exitFullscreen();
 
 class VideoPlayerYouTubeStyleScreen extends StatefulWidget {
   const VideoPlayerYouTubeStyleScreen({super.key});
@@ -16,10 +24,13 @@ class VideoPlayerYouTubeStyleScreen extends StatefulWidget {
 class _VideoPlayerYouTubeStyleScreenState
     extends State<VideoPlayerYouTubeStyleScreen> {
   final _controller = Modular.get<HomeController>();
+  late bool _controlsVisible;
+  Timer? _hideControlsTimer;
 
   @override
   void initState() {
     super.initState();
+    _controlsVisible = true;
     _controller.videoController
       ..addListener(() {
         if (mounted) {
@@ -31,20 +42,42 @@ class _VideoPlayerYouTubeStyleScreenState
           setState(() {}); // Atualiza após inicialização
         }
       });
+    _scheduleHideControls();
   }
 
   void _toggleControlsVisibility() {
     setState(() {
-      _controller.showControls = !_controller.showControls;
+      _controlsVisible = !_controlsVisible;
+    });
+
+    if (_controlsVisible) {
+      _scheduleHideControls();
+    } else {
+      _cancelHideControlsTimer();
+    }
+  }
+
+  void _scheduleHideControls() {
+    _cancelHideControlsTimer(); // Cancela o timer anterior
+    _hideControlsTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted && _controlsVisible) {
+        setState(() {
+          _controlsVisible = false;
+        });
+      }
     });
   }
 
+  void _cancelHideControlsTimer() {
+    _hideControlsTimer?.cancel();
+  }
+
   void _enterBrowserFullscreen() {
-    html.document.documentElement?.requestFullscreen();
+    enterFullscreen(); // Chama o método JavaScript para fullscreen
   }
 
   void _exitBrowserFullscreen() {
-    html.document.exitFullscreen();
+    exitFullscreen(); // Chama o método JavaScript para sair do fullscreen
   }
 
   @override
@@ -97,20 +130,26 @@ class _VideoPlayerYouTubeStyleScreenState
     return Stack(
       alignment: Alignment.center,
       children: [
-        GestureDetector(
-          onTap: _toggleControlsVisibility,
-          child: AspectRatio(
-            aspectRatio: _controller.videoController.value.isInitialized
-                ? _controller.videoController.value.aspectRatio
-                : 16 / 9,
-            child: _controller.videoController.value.isInitialized
-                ? VideoPlayer(_controller.videoController)
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+        AspectRatio(
+          aspectRatio: _controller.videoController.value.isInitialized
+              ? _controller.videoController.value.aspectRatio
+              : 16 / 9,
+          child: _controller.videoController.value.isInitialized
+              ? VideoPlayer(_controller.videoController)
+              : const Center(
+                  child: CircularProgressIndicator(),
+                ),
+        ),
+        Positioned.fill(
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              _toggleControlsVisibility();
+              _scheduleHideControls(); // Reinicia o timer
+            },
           ),
         ),
-        if (_controller.showControls)
+        if (_controlsVisible)
           Positioned.fill(
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -127,20 +166,26 @@ class _VideoPlayerYouTubeStyleScreenState
       body: Stack(
         alignment: Alignment.center,
         children: [
-          GestureDetector(
-            onTap: _toggleControlsVisibility,
-            child: AspectRatio(
-              aspectRatio: _controller.videoController.value.isInitialized
-                  ? _controller.videoController.value.aspectRatio
-                  : 16 / 9,
-              child: _controller.videoController.value.isInitialized
-                  ? VideoPlayer(_controller.videoController)
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+          AspectRatio(
+            aspectRatio: _controller.videoController.value.isInitialized
+                ? _controller.videoController.value.aspectRatio
+                : 16 / 9,
+            child: _controller.videoController.value.isInitialized
+                ? VideoPlayer(_controller.videoController)
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+          ),
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                _toggleControlsVisibility();
+                _scheduleHideControls(); // Reinicia o timer
+              },
             ),
           ),
-          if (_controller.showControls)
+          if (_controlsVisible)
             Positioned.fill(
               child: Align(
                 alignment: Alignment.bottomCenter,
@@ -244,6 +289,7 @@ class _VideoPlayerYouTubeStyleScreenState
 
   @override
   void dispose() {
+    _cancelHideControlsTimer(); // Cancela o timer ao destruir o widget
     _controller.videoController.dispose();
     super.dispose();
   }

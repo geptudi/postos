@@ -54,7 +54,7 @@ class _InfoPageState extends State<InfoPage> {
             },
             icon: Icon(Icons.play_circle_filled,
                 color: Colors.red), // ou use um ícone SVG
-            label: Text('YouTube'),
+            label: Text('Vídeo explicativo'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.red,
               backgroundColor: Colors.white,
