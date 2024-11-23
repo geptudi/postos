@@ -25,6 +25,6 @@ const Map<String, List<String>> postos = {
     'Bairro: São Francisco',
     'Coordenador(a)es: Ozair  - 9 9928 4455',
     'Rodrigo - 9 9965 1410',
-    'As Cestas para este posto, devem ser entregues no sábado do dia 21/12 das 8:00 as 12:00, ou em uma data previamente combinada com os coordenadores do respectivo posto.',    
+    'As Cestas para este posto, devem ser entregues no sábado do dia 14/12 das 8:00 as 12:00, ou em uma data previamente combinada com os coordenadores do respectivo posto.',    
   ],
 };
