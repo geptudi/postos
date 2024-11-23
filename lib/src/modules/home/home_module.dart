@@ -4,8 +4,8 @@ import 'package:postos/src/modules/home/info_page.dart';
 import 'home_controller.dart';
 import 'home_page.dart';
 import 'modelsview/insert_edit_view.dart';
+import 'modelsview/video_player_screen.dart';
 import 'repositories/assistido_gsheet_repository.dart';
-import 'youtube_page.dart';
 
 class HomeModule extends Module {
   @override
@@ -19,7 +19,7 @@ class HomeModule extends Module {
   void routes(r) {
     r.child('/', child: (_) => const InfoPage());
     r.child('/home', child: (_) => const HomePage());  
-    r.child('/youtube', child: (_) => const YoutubePage());                            
+    r.child('/youtube', child: (_) => const VideoPlayerYouTubeStyleScreen());                             
     r.child('/insert', child: (_) => InsertEditViewPage(assistido: r.args.data['assistido']));  
   }
 }

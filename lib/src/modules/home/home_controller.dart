@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:video_player/video_player.dart';
 import 'repositories/assistido_gsheet_repository.dart';
 
 class HomeController {
@@ -10,6 +11,11 @@ class HomeController {
   final ValueNotifier<String> activeTagButtom = ValueNotifier<String>('');
   final ValueNotifier<bool> isExpanded = ValueNotifier<bool>(false);      
   late final AssistidoRemoteStorageRepository assistidosStoreList;
+  final videoController = VideoPlayerController.asset('assets/cestasnatal.mp4');
+  bool showControls = true;
+  bool wasPlaying = false;
+  bool isFullScreem = false;
+  bool isChange = false;
 
 
   HomeController({AssistidoRemoteStorageRepository? assistidosStoreList}) {
