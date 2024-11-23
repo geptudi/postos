@@ -1,3 +1,4 @@
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:video_player/video_player.dart';
@@ -38,13 +39,18 @@ class _VideoPlayerYouTubeStyleScreenState
     });
   }
 
+  void _enterBrowserFullscreen() {
+    html.document.documentElement?.requestFullscreen();
+  }
+
+  void _exitBrowserFullscreen() {
+    html.document.exitFullscreen();
+  }
+
   @override
   Widget build(BuildContext context) {
     return _controller.isFullScreem
-        ? Scaffold(
-            backgroundColor: Colors.black,
-            body: Center(child: _buildScreen()),
-          )
+        ? _buildFullScreen()
         : TemplatePage(
             hasProx: null,
             isLeading: true,
@@ -65,7 +71,10 @@ class _VideoPlayerYouTubeStyleScreenState
                 ],
               ),
             ),
-            itens: (_, __) => [
+            itens: (HomeController controller,
+                    GlobalKey<FormFieldState<List<ValueNotifier<String>>>>
+                        state) =>
+                [
               const Text(
                 textAlign: TextAlign.justify,
                 'Aqui você pode fazer a diferença! Veja como é simples.',
@@ -73,7 +82,7 @@ class _VideoPlayerYouTubeStyleScreenState
               ),
               SizedBox(
                 height: 400,
-                child: _buildScreen(),
+                child: _buildNormalScreen(),
               ),
               const Text(
                 textAlign: TextAlign.justify,
@@ -84,14 +93,7 @@ class _VideoPlayerYouTubeStyleScreenState
           );
   }
 
-  Widget _buildScreen() {
-    if (_controller.isChange) {
-      _controller.isChange = false;
-      if (_controller.wasPlaying) {
-        _controller.wasPlaying = false;
-        _controller.videoController.play();
-      }
-    }
+  Widget _buildNormalScreen() {
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -116,6 +118,37 @@ class _VideoPlayerYouTubeStyleScreenState
             ),
           ),
       ],
+    );
+  }
+
+  Widget _buildFullScreen() {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          GestureDetector(
+            onTap: _toggleControlsVisibility,
+            child: AspectRatio(
+              aspectRatio: _controller.videoController.value.isInitialized
+                  ? _controller.videoController.value.aspectRatio
+                  : 16 / 9,
+              child: _controller.videoController.value.isInitialized
+                  ? VideoPlayer(_controller.videoController)
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+            ),
+          ),
+          if (_controller.showControls)
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: _buildVideoControls(),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -155,11 +188,14 @@ class _VideoPlayerYouTubeStyleScreenState
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  _controller.wasPlaying =
-                      _controller.videoController.value.isPlaying;
-                  _controller.isChange = true;
-                  _controller.isFullScreem = !_controller.isFullScreem;
-                  setState(() {});
+                  setState(() {
+                    if (_controller.isFullScreem) {
+                      _exitBrowserFullscreen();
+                    } else {
+                      _enterBrowserFullscreen();
+                    }
+                    _controller.isFullScreem = !_controller.isFullScreem;
+                  });
                 },
               ),
             ],
