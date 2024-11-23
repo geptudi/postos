@@ -15,7 +15,7 @@ class _VideoPlayerYouTubeStyleScreenState
     extends State<VideoPlayerYouTubeStyleScreen> {
   late VideoPlayerController _controller;
   bool _isPlaying = false;
-  bool _isFullScreen = false;
+  bool _showControls = true;
 
   @override
   void initState() {
@@ -46,76 +46,87 @@ class _VideoPlayerYouTubeStyleScreenState
     });
   }
 
+  void _toggleControlsVisibility() {
+    setState(() {
+      _showControls = !_showControls;
+    });
+  }
+
   void _toggleFullScreen(BuildContext context) {
-    if (_isFullScreen) {
-      Navigator.of(context).pop();
-    } else {
-      Navigator.of(context).push(
-        PageRouteBuilder(
-          opaque: false,
-          pageBuilder: (context, animation, secondaryAnimation) {
-            return FullScreenVideoPlayer(controller: _controller);
-          },
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => FullScreenVideoPlayer(
+          controller: _controller,
         ),
-      );
-    }
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Vídeo
-        Container(
-          height: MediaQuery.of(context).size.height * 0.6, // 60% da altura da tela
-          child: _controller.value.isInitialized
-              ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
-                )
-              : const Center(
-                  child: CircularProgressIndicator(),
-                ),
-        ),
-        // Controles
-        Container(
-          color: Colors.black,
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.play_arrow,
-                  color: _isPlaying ? Colors.grey : Colors.white,
-                ),
-                onPressed: _isPlaying ? null : _playPauseVideo,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.pause,
-                  color: !_isPlaying ? Colors.grey : Colors.white,
-                ),
-                onPressed: !_isPlaying ? null : _playPauseVideo,
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.stop,
-                  color: Colors.white,
-                ),
-                onPressed: _stopVideo,
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.fullscreen,
-                  color: Colors.white,
-                ),
-                onPressed: () => _toggleFullScreen(context),
-              ),
-            ],
+    return SizedBox(
+      height: 400, // Altura fixa para evitar infinito
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          GestureDetector(
+            onTap: _toggleControlsVisibility,
+            child: AspectRatio(
+              aspectRatio: _controller.value.isInitialized
+                  ? _controller.value.aspectRatio
+                  : 16 / 9,
+              child: _controller.value.isInitialized
+                  ? VideoPlayer(_controller)
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+            ),
           ),
-        ),
-      ],
+          if (_showControls)
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  color: Colors.black.withOpacity(0.5),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.play_arrow,
+                          color: _isPlaying ? Colors.grey : Colors.white,
+                        ),
+                        onPressed: _playPauseVideo,
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.pause,
+                          color: !_isPlaying ? Colors.grey : Colors.white,
+                        ),
+                        onPressed: _playPauseVideo,
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.stop,
+                          color: Colors.white,
+                        ),
+                        onPressed: _stopVideo,
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.fullscreen,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => _toggleFullScreen(context),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -126,26 +137,86 @@ class _VideoPlayerYouTubeStyleScreenState
   }
 }
 
-class FullScreenVideoPlayer extends StatelessWidget {
+class FullScreenVideoPlayer extends StatefulWidget {
   final VideoPlayerController controller;
 
   const FullScreenVideoPlayer({super.key, required this.controller});
 
   @override
+  State<FullScreenVideoPlayer> createState() => _FullScreenVideoPlayerState();
+}
+
+class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> {
+  bool _showControls = true;
+
+  void _toggleControlsVisibility() {
+    setState(() {
+      _showControls = !_showControls;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pop(); // Sai do fullscreen ao toque
-      },
-      child: Container(
-        color: Colors.black,
-        child: Center(
-          child: controller.value.isInitialized
-              ? AspectRatio(
-                  aspectRatio: controller.value.aspectRatio,
-                  child: VideoPlayer(controller),
-                )
-              : const CircularProgressIndicator(),
+      onTap: _toggleControlsVisibility,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          alignment: Alignment.center,
+          children: [
+            widget.controller.value.isInitialized
+                ? Center(
+                    child: AspectRatio(
+                      aspectRatio: widget.controller.value.aspectRatio,
+                      child: VideoPlayer(widget.controller),
+                    ),
+                  )
+                : const CircularProgressIndicator(),
+            if (_showControls)
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    color: Colors.black.withOpacity(0.5),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.play_arrow,
+                            color: widget.controller.value.isPlaying
+                                ? Colors.grey
+                                : Colors.white,
+                          ),
+                          onPressed: () => setState(() {
+                            widget.controller.play();
+                          }),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.pause,
+                            color: widget.controller.value.isPlaying
+                                ? Colors.white
+                                : Colors.grey,
+                          ),
+                          onPressed: () => setState(() {
+                            widget.controller.pause();
+                          }),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.fullscreen_exit,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
