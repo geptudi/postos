@@ -171,36 +171,38 @@ class _VideoPlayerYouTubeStyleScreenState
   Widget _buildFullScreen() {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          AspectRatio(
-            aspectRatio: _controller.videoController.value.isInitialized
-                ? _controller.videoController.value.aspectRatio
-                : 16 / 9,
-            child: _controller.videoController.value.isInitialized
-                ? VideoPlayer(_controller.videoController)
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-          ),
-          Positioned.fill(
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                _toggleControlsVisibility();
-                _scheduleHideControls(); // Reinicia o timer
-              },
+      body: Center(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            AspectRatio(
+              aspectRatio: _controller.videoController.value.isInitialized
+                  ? _controller.videoController.value.aspectRatio
+                  : 16 / 9,
+              child: _controller.videoController.value.isInitialized
+                  ? VideoPlayer(_controller.videoController)
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
             ),
-          ),
-          if (_controlsVisible)
             Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: _buildVideoControls(),
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  _toggleControlsVisibility();
+                  _scheduleHideControls(); // Reinicia o timer
+                },
               ),
             ),
-        ],
+            if (_controlsVisible)
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _buildVideoControls(),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
