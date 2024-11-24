@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         assistidoList.add(
           DoadorAssistido.fromList(
             response1[index],
-            value2: response2[index],
+            value2: response2[response1[index][0]-1],
           ),
         );
         if (((response2[index][1] ?? "") as String).isNotEmpty) {
