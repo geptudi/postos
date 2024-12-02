@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             value2: response2[response1[index][0]-1],
           ),
         );
-        if (((response2[index][1] ?? "") as String).isNotEmpty) {
+        if (((response2[response1[index][0]-1][1] ?? "") as String).isNotEmpty) {
           _controller.doadorCount.value++;
         }
       }
