@@ -61,8 +61,18 @@ class _HomePageState extends State<HomePage> {
         isLeading: true,
         answerLenght: 1,
         header: bg.Badge(
-          badgeStyle: const bg.BadgeStyle(badgeColor: Colors.red),
+          badgeStyle: const bg.BadgeStyle(badgeColor: Colors.green),
           position: bg.BadgePosition.topStart(top: 0, start: 0),
+          badgeContent: ValueListenableBuilder(
+            valueListenable: _controller.doadorCount,
+            builder: (BuildContext context, int count, _) => Text(
+              '$count',
+              style: const TextStyle(color: Colors.white, fontSize: 10.0),
+            ),
+          ),
+          child: bg.Badge(
+          badgeStyle: const bg.BadgeStyle(badgeColor: Colors.red),
+          position: bg.BadgePosition.topStart(top: 25, start: 0),
           badgeContent: ValueListenableBuilder(
             valueListenable: _controller.doadorCount,
             builder: (BuildContext context, int count, _) => Text(
@@ -86,7 +96,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-        ),
+        ),),
         itens: (HomeController controller,
                 GlobalKey<FormFieldState<List<ValueNotifier<String>>>> state) =>
             initValue.data == true
