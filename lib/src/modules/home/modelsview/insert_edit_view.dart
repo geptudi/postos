@@ -83,11 +83,12 @@ Telefone: ${_assistido.fone}
 Dados do posto:
          
 Posto de Assistência Espírita ${controller.activeTagButtom.value} 
-${Parameters.postos[controller.activeTagButtom.value]![0]}
-${Parameters.postos[controller.activeTagButtom.value]![1]}
-${Parameters.postos[controller.activeTagButtom.value]![2]}, e
-${Parameters.postos[controller.activeTagButtom.value]![3]}
+${Parameters.postos[controller.activeTagButtom.value][0] ?? ""}
+${Parameters.postos[controller.activeTagButtom.value][1] ?? ""}
+${Parameters.postos[controller.activeTagButtom.value][2] ?? ""}, e
+${Parameters.postos[controller.activeTagButtom.value][3] ?? ""}
 
+${Parameters.postos[controller.activeTagButtom.value][4] ?? ""}
 """,
                   ),
                 );
@@ -177,10 +178,10 @@ ${Parameters.postos[controller.activeTagButtom.value]![3]}
               ? ""
               : """
 Posto de Assistência Espírita ${controller.activeTagButtom.value} 
-${Parameters.postos[controller.activeTagButtom.value]![0]}
-${Parameters.postos[controller.activeTagButtom.value]![1]}
-${Parameters.postos[controller.activeTagButtom.value]![2]}, e
-${Parameters.postos[controller.activeTagButtom.value]![3]}
+${Parameters.postos[controller.activeTagButtom.value][0] ?? ""}
+${Parameters.postos[controller.activeTagButtom.value][1] ?? ""}
+${Parameters.postos[controller.activeTagButtom.value][2] ?? ""}, e
+${Parameters.postos[controller.activeTagButtom.value][3] ?? ""}
 """,
           style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
         ),
@@ -189,7 +190,7 @@ ${Parameters.postos[controller.activeTagButtom.value]![3]}
           controller.activeTagButtom.value == ""
               ? ""
               : """
-${Parameters.postos[controller.activeTagButtom.value]![4]}
+${Parameters.postos[controller.activeTagButtom.value][4] ?? ""}
 """,
           style: const TextStyle(color: Colors.red, fontSize: 15.0),
         ),

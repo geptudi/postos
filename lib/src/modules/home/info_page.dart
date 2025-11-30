@@ -102,10 +102,10 @@ class _InfoPageState extends State<InfoPage> {
                     ? ""
                     : """
 Posto de Assistência Espírita ${controller.activeTagButtom.value} 
-${posto[0]}
-${posto[1]}
-${posto[2]}, e
-${posto[3]}
+${posto[0] ?? ""}
+${posto[1] ?? ""}
+${posto[2] ?? ""}, e
+${posto[3] ?? ""}
 """,
                 style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
               ),
@@ -113,7 +113,7 @@ ${posto[3]}
                 textAlign: TextAlign.center,
                 controller.activeTagButtom.value == ""
                     ? ""
-                    : posto[4],
+                    : posto[4] ?? "",
                 style: const TextStyle(color: Colors.red, fontSize: 15.0),
               ),
             ],
