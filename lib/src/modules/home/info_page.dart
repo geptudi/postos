@@ -111,11 +111,9 @@ ${posto[3] ?? ""}
               ),
               Text(
                 textAlign: TextAlign.center,
-                controller.activeTagButtom.value == ""
-                    ? ""
-                    : posto[4] ?? "",
+                posto[4] ?? "",
                 style: const TextStyle(color: Colors.red, fontSize: 15.0),
-              ),
+              )),
             ],
           ),
         }),
