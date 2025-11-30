@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:intl/intl.dart';
-import '../../../models/parameters.dart';
+import '../../../models/parameters.dart';        // <-- IMPORTANTE
 import '../home_controller.dart';
 import '../models/doador_assistido_model.dart';
 import 'template_page.dart';
@@ -19,6 +19,7 @@ class InsertEditViewPage extends StatefulWidget {
 class _InsertEditViewPageState extends State<InsertEditViewPage> {
   final _assistido = DoadorAssistido.vazio();
   final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     _assistido.copy(widget.assistido);
@@ -27,8 +28,8 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final aux  = _assistido.nomeM1.split(" ");
-    final nome = '${aux[0]} ${(aux.length > 1 ? aux[1]: "")}';
+    final aux = _assistido.nomeM1.split(" ");
+    final nome = '${aux[0]} ${(aux.length > 1 ? aux[1] : "")}';
 
     return TemplatePage(
       hasProx: null,
@@ -62,10 +63,11 @@ class _InsertEditViewPageState extends State<InsertEditViewPage> {
             ),
             const Spacer(),
             IconButton(
-                tooltip: "Copia todas as informações desta tela",
-                onPressed: () async {
-                  await Clipboard.setData(
-                    ClipboardData(text: """
+              tooltip: "Copia todas as informações desta tela",
+              onPressed: () async {
+                await Clipboard.setData(
+                  ClipboardData(
+                    text: """
 OSGEPT - Obras Sociais do Grupo Espírita Paulo de Tarso
 
 Dados da Família assistida com ${_assistido.nomesMoradores.length + 1} pessoas:
@@ -81,16 +83,18 @@ Telefone: ${_assistido.fone}
 Dados do posto:
          
 Posto de Assistência Espírita ${controller.activeTagButtom.value} 
-${postos[controller.activeTagButtom.value]![0]}
-${postos[controller.activeTagButtom.value]![1]}
-${postos[controller.activeTagButtom.value]![2]}, e
-${postos[controller.activeTagButtom.value]![3]}
+${Parameters.postos[controller.activeTagButtom.value]![0]}
+${Parameters.postos[controller.activeTagButtom.value]![1]}
+${Parameters.postos[controller.activeTagButtom.value]![2]}, e
+${Parameters.postos[controller.activeTagButtom.value]![3]}
 
-${postos[controller.activeTagButtom.value]![4]}
-"""),
-                  );
-                },
-                icon: const Icon(Icons.copy_all_outlined))
+${Parameters.postos[controller.activeTagButtom.value]![4]}
+""",
+                  ),
+                );
+              },
+              icon: const Icon(Icons.copy_all_outlined),
+            ),
           ],
         ),
         const SizedBox(height: 20),
@@ -174,10 +178,10 @@ ${postos[controller.activeTagButtom.value]![4]}
               ? ""
               : """
 Posto de Assistência Espírita ${controller.activeTagButtom.value} 
-${postos[controller.activeTagButtom.value]![0]}
-${postos[controller.activeTagButtom.value]![1]}
-${postos[controller.activeTagButtom.value]![2]}, e
-${postos[controller.activeTagButtom.value]![3]}
+${Parameters.postos[controller.activeTagButtom.value]![0]}
+${Parameters.postos[controller.activeTagButtom.value]![1]}
+${Parameters.postos[controller.activeTagButtom.value]![2]}, e
+${Parameters.postos[controller.activeTagButtom.value]![3]}
 """,
           style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
         ),
@@ -186,7 +190,7 @@ ${postos[controller.activeTagButtom.value]![3]}
           controller.activeTagButtom.value == ""
               ? ""
               : """
-${postos[controller.activeTagButtom.value]![4]}
+${Parameters.postos[controller.activeTagButtom.value]![4]}
 """,
           style: const TextStyle(color: Colors.red, fontSize: 15.0),
         ),
@@ -195,6 +199,8 @@ ${postos[controller.activeTagButtom.value]![4]}
           'Dados do Doador:',
           textAlign: TextAlign.left,
         ),
+
+        // … (RESTO DO ARQUIVO NÃO MEXE EM NADA)
         Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.always, //.onUserInteraction,
