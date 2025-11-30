@@ -88,33 +88,49 @@ class _InfoPageState extends State<InfoPage> {
           style: TextStyle(color: Colors.black, fontSize: 15.0),
         ),
         ValueListenableBuilder(
-          valueListenable: controller.answerAux.value[0],
-          builder: (BuildContext context, String activeTag, Widget? child) =>
-              Column(
-            children: [
-              Text(
-                textAlign: TextAlign.center,
-                controller.activeTagButtom.value == ""
-                    ? ""
-                    : """
-Posto de Assistência Espírita ${controller.activeTagButtom.value} 
-${postos[controller.activeTagButtom.value]![0]}
-${postos[controller.activeTagButtom.value]![1]}
-${postos[controller.activeTagButtom.value]![2]}, e
-${postos[controller.activeTagButtom.value]![3]}
+  valueListenable: controller.answerAux.value[0],
+  builder: (BuildContext context, String activeTag, Widget? child) {
+    final key = controller.activeTagButtom.value;
+
+    // se nada foi escolhido ainda:
+    if (key.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // tenta pegar o posto
+    final postoInfo = postos[key];
+
+    // se não achou essa chave no mapa, evita crash
+    if (postoInfo == null || postoInfo.length < 5) {
+      return const Text(
+        'Não foi possível carregar os dados desse posto.',
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.red),
+      );
+    }
+
+    return Column(
+      children: [
+        Text(
+          textAlign: TextAlign.center,
+          """
+Posto de Assistência Espírita $key
+${postoInfo[0]}
+${postoInfo[1]}
+${postoInfo[2]}, e
+${postoInfo[3]}
 """,
-                style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
-              ),
-              Text(
-                textAlign: TextAlign.center,
-                controller.activeTagButtom.value == ""
-                    ? ""
-                    : postos[controller.activeTagButtom.value]![4],
-                style: const TextStyle(color: Colors.red, fontSize: 15.0),
-              ),
-            ],
-          ),
+          style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
         ),
+        Text(
+          textAlign: TextAlign.center,
+          postoInfo[4],
+          style: const TextStyle(color: Colors.red, fontSize: 15.0),
+        ),
+      ],
+    );
+  },
+),
         const Text(
           textAlign: TextAlign.justify,
           '\nSua\tgenerosidade\tfaz\ta\tdiferença\tna\tvida\tde\tquem\tmais\tprecisa.\n\nJunte-se\ta\tnós\tnessa\tcausa\te\tajude\ta\tconstruir\tum\tnatal\tmelhor\te\trecheado\tpara\ttodos.\n\nClique\tem\tpróximo\tpara\tcontinuar.\n\nE\tque\tDeus\tlhe\tabençõe.\n\n',
