@@ -113,7 +113,7 @@ ${posto[3] ?? ""}
                 textAlign: TextAlign.center,
                 posto[4] ?? "",
                 style: const TextStyle(color: Colors.red, fontSize: 15.0),
-              )),
+              ),
             ],
           ),
         }),
