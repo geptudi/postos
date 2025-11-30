@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-
 import '../../models/parameters.dart';
 import 'home_controller.dart';
 import 'modelsview/single_selection_list.dart';
@@ -14,11 +13,14 @@ class InfoPage extends StatefulWidget {
 }
 
 class _InfoPageState extends State<InfoPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final postosCarregados = Parameters.postos;
-
     return TemplatePage(
       hasProx: "home",
       answerLenght: 1,
@@ -39,35 +41,33 @@ class _InfoPageState extends State<InfoPage> {
         ),
       ),
       itens: (HomeController controller,
-          GlobalKey<FormFieldState<List<ValueNotifier<String>>>> state) =>
-      [
-
+              GlobalKey<FormFieldState<List<ValueNotifier<String>>>> state) =>
+          [
         const Text(
           textAlign: TextAlign.justify,
           'Esta\tpágina\tvisa\tproporcionar\tum\tnatal\tcheio\tde\tmuito\tamor\te\tfraternidade.\n\nPara\tsaber\tmais\tcomo\tusar\testa\tferramenta,\tveja\to\tvideo\tabaixo:',
           style: TextStyle(color: Colors.black, fontSize: 16.0),
         ),
-
         Center(
           child: ElevatedButton.icon(
             onPressed: () {
-              Modular.to.pushNamed("youtube");
+             Modular.to.pushNamed("youtube");
             },
-            icon: const Icon(Icons.play_circle_filled, color: Colors.red),
-            label: const Text('Vídeo explicativo'),
+            icon: Icon(Icons.play_circle_filled,
+                color: Colors.red), // ou use um ícone SVG
+            label: Text('Vídeo explicativo'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.red,
               backgroundColor: Colors.white,
             ),
           ),
         ),
-
+        //player,
         const Text(
           textAlign: TextAlign.justify,
           '\nPerfeito!!\tAgora\tescolha\to\tposto\tde\tassistência\tque\tdeseja\tajudar:\n',
           style: TextStyle(color: Colors.black, fontSize: 16.0),
         ),
-
         SingleSelectionList(
           answer: controller.activeTagButtom
             ..addListener(() {
@@ -83,47 +83,42 @@ class _InfoPageState extends State<InfoPage> {
           ],
           optionsColumnsSize: 1,
         ),
-
         const Text(
           textAlign: TextAlign.justify,
           '\nO\tposto\tescolhido\tfoi:\n',
           style: TextStyle(color: Colors.black, fontSize: 15.0),
         ),
-
         ValueListenableBuilder(
           valueListenable: controller.answerAux.value[0],
           builder: (BuildContext context, String activeTag, Widget? child) {
-            if (controller.activeTagButtom.value.isEmpty ||
-                !postosCarregados.containsKey(controller.activeTagButtom.value)) {
-              return const SizedBox.shrink();
-            }
-
-            final posto =
-                postosCarregados[controller.activeTagButtom.value]!;
+            final posto = postosCarregados[controller.activeTagButtom.value];
+            if (posto == null) return SizedBox.shrink();
 
             return Column(
-              children: [
-                Text(
-                  textAlign: TextAlign.center,
-                  """
+            children: [
+              Text(
+                textAlign: TextAlign.center,
+                controller.activeTagButtom.value == ""
+                    ? ""
+                    : """
 Posto de Assistência Espírita ${controller.activeTagButtom.value} 
 ${posto[0]}
 ${posto[1]}
 ${posto[2]}, e
 ${posto[3]}
 """,
-                  style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
-                ),
-                Text(
-                  textAlign: TextAlign.center,
-                  posto[4],
-                  style: const TextStyle(color: Colors.red, fontSize: 15.0),
-                ),
-              ],
-            );
-          },
-        ),
-
+                style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+              ),
+              Text(
+                textAlign: TextAlign.center,
+                controller.activeTagButtom.value == ""
+                    ? ""
+                    : posto[4],
+                style: const TextStyle(color: Colors.red, fontSize: 15.0),
+              ),
+            ],
+          ),
+        }),
         const Text(
           textAlign: TextAlign.justify,
           '\nSua\tgenerosidade\tfaz\ta\tdiferença\tna\tvida\tde\tquem\tmais\tprecisa.\n\nJunte-se\ta\tnós\tnessa\tcausa\te\tajude\ta\tconstruir\tum\tnatal\tmelhor\te\trecheado\tpara\ttodos.\n\nClique\tem\tpróximo\tpara\tcontinuar.\n\nE\tque\tDeus\tlhe\tabençõe.\n\n',
@@ -131,5 +126,10 @@ ${posto[3]}
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
