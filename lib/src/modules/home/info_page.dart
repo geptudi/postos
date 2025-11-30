@@ -14,11 +14,6 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return TemplatePage(
       hasProx: "home",
@@ -44,34 +39,35 @@ class _InfoPageState extends State<InfoPage> {
           [
         const Text(
           textAlign: TextAlign.justify,
-          'Esta\tpágina\tvisa\tproporcionar\tum\tnatal\tcheio\tde\tmuito\tamor\te\tfraternidade.\n\nPara\tsaber\tmais\tcomo\tusar\testa\tferramenta,\tveja\to\tvideo\tabaixo:',
+          'Esta página visa proporcionar um natal cheio de muito amor e fraternidade.\n\n'
+          'Para saber mais como usar esta ferramenta, veja o vídeo abaixo:',
           style: TextStyle(color: Colors.black, fontSize: 16.0),
         ),
+
         Center(
           child: ElevatedButton.icon(
-            onPressed: () {
-             Modular.to.pushNamed("youtube");
-            },
-            icon: Icon(Icons.play_circle_filled,
-                color: Colors.red), // ou use um ícone SVG
-            label: Text('YouTube'),
+            onPressed: () => Modular.to.pushNamed("youtube"),
+            icon: const Icon(Icons.play_circle_filled, color: Colors.red),
+            label: const Text('YouTube'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.red,
               backgroundColor: Colors.white,
             ),
           ),
         ),
-        //player,
+
         const Text(
           textAlign: TextAlign.justify,
-          '\nPerfeito!!\tAgora\tescolha\to\tposto\tde\tassistência\tque\tdeseja\tajudar:\n',
+          '\nPerfeito!! Agora escolha o posto de assistência que deseja ajudar:\n',
           style: TextStyle(color: Colors.black, fontSize: 16.0),
         ),
+
         SingleSelectionList(
           answer: controller.activeTagButtom
             ..addListener(() {
               state.currentState!.didChange(
-                  <ValueNotifier<String>>[controller.activeTagButtom]);
+                <ValueNotifier<String>>[controller.activeTagButtom],
+              );
             }),
           hasPrefiroNaoDizer: false,
           options: const [
@@ -82,66 +78,64 @@ class _InfoPageState extends State<InfoPage> {
           ],
           optionsColumnsSize: 1,
         ),
+
         const Text(
           textAlign: TextAlign.justify,
-          '\nO\tposto\tescolhido\tfoi:\n',
+          '\nO posto escolhido foi:\n',
           style: TextStyle(color: Colors.black, fontSize: 15.0),
         ),
+
+        // ------- AQUI É O GRANDE PONTO DA CORREÇÃO -------
         ValueListenableBuilder(
-  valueListenable: controller.answerAux.value[0],
-  builder: (BuildContext context, String activeTag, Widget? child) {
-    final key = controller.activeTagButtom.value;
+          valueListenable: controller.activeTagButtom,
+          builder: (context, key, _) {
+            if (key.isEmpty) {
+              return const SizedBox.shrink();
+            }
 
-    // se nada foi escolhido ainda:
-    if (key.isEmpty) {
-      return const SizedBox.shrink();
-    }
+            final postoInfo = postos[key];
 
-    // tenta pegar o posto
-    final postoInfo = postos[key];
+            if (postoInfo == null || postoInfo.length < 5) {
+              return const Text(
+                'Não foi possível carregar os dados desse posto.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.red),
+              );
+            }
 
-    // se não achou essa chave no mapa, evita crash
-    if (postoInfo == null || postoInfo.length < 5) {
-      return const Text(
-        'Não foi possível carregar os dados desse posto.',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.red),
-      );
-    }
-
-    return Column(
-      children: [
-        Text(
-          textAlign: TextAlign.center,
-          """
+            return Column(
+              children: [
+                Text(
+                  textAlign: TextAlign.center,
+                  """
 Posto de Assistência Espírita $key
 ${postoInfo[0]}
 ${postoInfo[1]}
 ${postoInfo[2]}, e
 ${postoInfo[3]}
 """,
-          style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                  style:
+                      const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                ),
+                Text(
+                  postoInfo[4],
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.red, fontSize: 15.0),
+                ),
+              ],
+            );
+          },
         ),
-        Text(
-          textAlign: TextAlign.center,
-          postoInfo[4],
-          style: const TextStyle(color: Colors.red, fontSize: 15.0),
-        ),
-      ],
-    );
-  },
-),
+
         const Text(
           textAlign: TextAlign.justify,
-          '\nSua\tgenerosidade\tfaz\ta\tdiferença\tna\tvida\tde\tquem\tmais\tprecisa.\n\nJunte-se\ta\tnós\tnessa\tcausa\te\tajude\ta\tconstruir\tum\tnatal\tmelhor\te\trecheado\tpara\ttodos.\n\nClique\tem\tpróximo\tpara\tcontinuar.\n\nE\tque\tDeus\tlhe\tabençõe.\n\n',
+          '\nSua generosidade faz a diferença na vida de quem mais precisa.\n\n'
+          'Junte-se a nós nessa causa e ajude a construir um natal melhor e recheado para todos.\n\n'
+          'Clique em "próximo" para continuar.\n\n'
+          'E que Deus lhe abençoe.\n\n',
           style: TextStyle(color: Colors.black, fontSize: 15.0),
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
