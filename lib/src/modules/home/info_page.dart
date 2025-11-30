@@ -118,8 +118,8 @@ ${posto[3] ?? ""}
           ),
         }),
         const Text(
-          textAlign: TextAlign.justify,
           '\nSua\tgenerosidade\tfaz\ta\tdiferença\tna\tvida\tde\tquem\tmais\tprecisa.\n\nJunte-se\ta\tnós\tnessa\tcausa\te\tajude\ta\tconstruir\tum\tnatal\tmelhor\te\trecheado\tpara\ttodos.\n\nClique\tem\tpróximo\tpara\tcontinuar.\n\nE\tque\tDeus\tlhe\tabençõe.\n\n',
+          textAlign: TextAlign.justify,
           style: TextStyle(color: Colors.black, fontSize: 15.0),
         ),
       ],
