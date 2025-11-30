@@ -5,5 +5,6 @@ import 'package:postos/src/app_widget.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Parameters.loadPostos();   // <--- CARREGA ANTES DE QUALQUER TELA
   runApp(ModularApp(module: AppModule(), child: const AppWidget()));
 }

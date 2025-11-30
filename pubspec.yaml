@@ -33,6 +33,8 @@ dependencies:
   # youtube_player_iframe: ^5.2.0   
   # better_player: ^0.0.84 
   video_player: ^2.9.2
+  http: ^1.2.1
+
 
 dev_dependencies:
   flutter_test:
