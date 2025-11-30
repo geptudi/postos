@@ -21,6 +21,7 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
     final postosCarregados = Parameters.postos;
+
     return TemplatePage(
       hasProx: "home",
       answerLenght: 1,
@@ -48,31 +49,36 @@ class _InfoPageState extends State<InfoPage> {
           'Esta\tpágina\tvisa\tproporcionar\tum\tnatal\tcheio\tde\tmuito\tamor\te\tfraternidade.\n\nPara\tsaber\tmais\tcomo\tusar\testa\tferramenta,\tveja\to\tvideo\tabaixo:',
           style: TextStyle(color: Colors.black, fontSize: 16.0),
         ),
+
         Center(
           child: ElevatedButton.icon(
             onPressed: () {
-             Modular.to.pushNamed("youtube");
+              Modular.to.pushNamed("youtube");
             },
-            icon: Icon(Icons.play_circle_filled,
-                color: Colors.red), // ou use um ícone SVG
-            label: Text('Vídeo explicativo'),
+            icon: const Icon(
+              Icons.play_circle_filled,
+              color: Colors.red,
+            ),
+            label: const Text('Vídeo explicativo'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.red,
               backgroundColor: Colors.white,
             ),
           ),
         ),
-        //player,
+
         const Text(
           textAlign: TextAlign.justify,
           '\nPerfeito!!\tAgora\tescolha\to\tposto\tde\tassistência\tque\tdeseja\tajudar:\n',
           style: TextStyle(color: Colors.black, fontSize: 16.0),
         ),
+
         SingleSelectionList(
           answer: controller.activeTagButtom
             ..addListener(() {
               state.currentState!.didChange(
-                  <ValueNotifier<String>>[controller.activeTagButtom]);
+                <ValueNotifier<String>>[controller.activeTagButtom],
+              );
             }),
           hasPrefiroNaoDizer: false,
           options: const [
@@ -83,42 +89,50 @@ class _InfoPageState extends State<InfoPage> {
           ],
           optionsColumnsSize: 1,
         ),
+
         const Text(
           textAlign: TextAlign.justify,
-          '\nO\tposto\tescolhido\tfoi:\n',
+          '\nO posto escolhido foi:\n',
           style: TextStyle(color: Colors.black, fontSize: 15.0),
         ),
+
         ValueListenableBuilder(
           valueListenable: controller.answerAux.value[0],
           builder: (BuildContext context, String activeTag, Widget? child) {
-            final posto = postosCarregados[controller.activeTagButtom.value];
-            if (posto == null) return SizedBox.shrink();
+            final posto =
+                postosCarregados[controller.activeTagButtom.value];
+
+            if (posto == null) return const SizedBox.shrink();
 
             return Column(
-            children: [
-              Text(
-                textAlign: TextAlign.center,
-                controller.activeTagButtom.value == ""
-                    ? ""
-                    : """
+              children: [
+                Text(
+                  textAlign: TextAlign.center,
+                  controller.activeTagButtom.value == ""
+                      ? ""
+                      : """
 Posto de Assistência Espírita ${controller.activeTagButtom.value} 
 ${posto[0] ?? ""}
 ${posto[1] ?? ""}
 ${posto[2] ?? ""}, e
 ${posto[3] ?? ""}
 """,
-                style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
-              ),
-              Text(
-                textAlign: TextAlign.center,
-                posto[4] ?? "",
-                style: const TextStyle(color: Colors.red, fontSize: 15.0),
-              ),
-            ],
-          ),
-        }),
+                  style:
+                      const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                ),
+                Text(
+                  textAlign: TextAlign.center,
+                  posto[4] ?? "",
+                  style:
+                      const TextStyle(color: Colors.red, fontSize: 15.0),
+                ),
+              ],
+            );
+          },
+        ),
+
         const Text(
-          '\nSua\tgenerosidade\tfaz\ta\tdiferença\tna\tvida\tde\tquem\tmais\tprecisa.\n\nJunte-se\ta\tnós\tnessa\tcausa\te\tajude\ta\tconstruir\tum\tnatal\tmelhor\te\trecheado\tpara\ttodos.\n\nClique\tem\tpróximo\tpara\tcontinuar.\n\nE\tque\tDeus\tlhe\tabençõe.\n\n',
+          '\nSua generosidade faz a diferença na vida de quem mais precisa.\n\nJunte-se a nós nessa causa e ajude a construir um natal melhor e recheado para todos.\n\nClique em próximo para continuar.\n\nE que Deus lhe abençoe.\n\n',
           textAlign: TextAlign.justify,
           style: TextStyle(color: Colors.black, fontSize: 15.0),
         ),
