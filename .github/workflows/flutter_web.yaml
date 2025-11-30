@@ -1,4 +1,4 @@
-name: Flutter Web
+name: Deploy Flutter Web
 
 on:
   push:
@@ -11,31 +11,23 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
           channel: "stable"
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Web
-        run: |
-          git config --global init.defaultBranch main
-          # flutter build web --release --base-href=/postos/
-          flutter build web --wasm --release --base-href=/postos/
+      - name: Build Web (WASM)
+        run: flutter build web --wasm --release --base-href=/postos/
 
-      - name: Deploy
-        run: |
-          cd build/web
-          git init
-          git config --global user.email paulodetarso.udi@gmail.com
-          git config --global user.name geptudi
-          git status
-          git remote add origin https://${{secrets.token}}@github.com/geptudi/postos.git
-          git checkout -b gh-pages
-          git add --all
-          git commit -m "update"
-          git push origin gh-pages -f
+      # Limpa completamente a branch gh-pages e publica a nova versão
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.token }}
+          publish_dir: ./build/web
+          force_orphan: true
