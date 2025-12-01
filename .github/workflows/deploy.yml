@@ -8,25 +8,26 @@ permissions:
   actions: write
 
 jobs:
-  build_and_deploy:
+  deploy:
+    name: Build & Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout código
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Instalar Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
 
-      - name: Pub Get
+      - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Flutter Web (WASM)
+      - name: Build Web (WASM)
         run: flutter build web --wasm --release --base-href=/postos/
 
-      - name: Deploy para gh-pages
+      - name: Deploy to GitHub Pages
         id: deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -34,32 +35,31 @@ jobs:
           folder: build/web
           clean: true
 
-      - name: Esperar GitHub Pages atualizar
-        run: sleep 15
+      - name: Esperar atualização do GitHub Pages
+        run: sleep 10
 
-      - name: Testar se o site carregou
+      - name: Testar site
         id: test
         run: |
           echo "Testando version.json..."
           STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/version.json)
-
           if [ "$STATUS" != "200" ]; then
-            echo "ERRO: version.json não foi carregado."
+            echo "Erro: version.json não carregou"
             exit 1
           fi
 
-          echo "Testando main.dart.wasm..."
-          WASM_STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/main.dart.wasm)
-
-          if [ "$WASM_STATUS" != "200" ]; then
-            echo "ERRO: main.dart.wasm não está acessível."
+          echo "Testando WASM..."
+          WASM=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/main.dart.wasm)
+          if [ "$WASM" != "200" ]; then
+            echo "Erro: main.dart.wasm não carregou"
             exit 1
           fi
 
-          echo "Site carregado com sucesso!"
+          echo "Site OK!"
 
-  rollback:
-    needs: build_and_deploy
+  rollback_automatico:
+    name: Auto Rollback
+    needs: deploy
     if: failure()
     uses: ./.github/workflows/rollback.yml
     secrets: inherit
