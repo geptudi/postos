@@ -36,23 +36,14 @@ jobs:
           folder: build/web
           clean: true
 
-<<<<<<< HEAD
       - name: Wait for GitHub Pages update
         run: sleep 10
 
       - name: Test version.json
         id: test_version
-=======
-      - name: Esperar atualização do GitHub Pages
-        run: sleep 10
-
-      - name: Testar site
-        id: test
->>>>>>> 15e2ea2de9940cd88d7d53f3775f59b486699f0d
         run: |
           STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/version.json)
           if [ "$STATUS" != "200" ]; then
-<<<<<<< HEAD
             echo "version.json FAILED ($STATUS)"
             exit 1
           fi
@@ -70,22 +61,6 @@ jobs:
         run: echo "Deploy OK!"
 
   rollback_automatic:
-=======
-            echo "Erro: version.json não carregou"
-            exit 1
-          fi
-
-          echo "Testando WASM..."
-          WASM=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/main.dart.wasm)
-          if [ "$WASM" != "200" ]; then
-            echo "Erro: main.dart.wasm não carregou"
-            exit 1
-          fi
-
-          echo "Site OK!"
-
-  rollback_automatico:
->>>>>>> 15e2ea2de9940cd88d7d53f3775f59b486699f0d
     name: Auto Rollback
     needs: deploy
     if: failure()
