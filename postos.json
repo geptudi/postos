@@ -1,0 +1,33 @@
+{
+  "Fabiano de Cristo": {
+    "endereco": "Rua Abilia Ferreira Diniz nº 105",
+    "bairro": "Pacaembu",
+    "coordenador1": "Coordenador(a)es: Maria do Carmo - 9 9879 4774",
+    "coordenador2": "Mauro Roberto - 9 9886 0205",
+    "entrega": "As Cestas para este posto, devem ser entregues no sábado do dia 20/12 das 8:00 as 12:00, ou em uma data previamente combinada com os coordenadores do respectivo posto."
+  },
+
+  "Eurípedes Barsanulfo": {
+    "endereco": "Rua Honorato Fagundes da Costa nº 841",
+    "bairro": "Morada Nova",
+    "coordenador1": "Coordenador(a)es: Josué  - 9 9125 3106",
+    "coordenador2": "Thiago - 9 9267 2502",
+    "entrega": "As Cestas para este posto, devem ser entregues no domingo do dia 21/12 das 8:00 as 12:00, ou em uma data previamente combinada com os coordenadores do respectivo posto."
+  },
+
+  "Mãe Zeferina": {
+    "endereco": "Av.: José Pires Defensor nº 35",
+    "bairro": "Taiaman",
+    "coordenador1": "Coordenador(a)es: Edson - 9 9968 7096",
+    "coordenador2": "",
+    "entrega": "As Cestas para este posto, devem ser entregues no domingo do dia 21/12 das 8:00 as 12:00, ou em uma data previamente combinada com os coordenadores do respectivo posto."
+  },
+
+  "Simão Pedro": {
+    "endereco": "Rua da Ternura nº 451",
+    "bairro": "São Francisco",
+    "coordenador1": "Coordenador(a)es: Ozair  - 9 9928 4455",
+    "coordenador2": "Rodrigo - 9 9965 1410",
+    "entrega": "As Cestas para este posto, devem ser entregues no sábado do dia 20/12 das 8:00 as 12:00, ou em uma data previamente combinada com os coordenadores do respectivo posto."
+  }
+}
