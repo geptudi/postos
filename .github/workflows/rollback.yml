@@ -1,12 +1,15 @@
 name: Rollback Deployment
+
 on:
   workflow_call:
-
+  workflow_dispatch:   # <---- AGORA PERMITE rodar manualmente
+  
 permissions:
   contents: write
 
 jobs:
   rollback:
+    name: Restore Previous Commit
     runs-on: ubuntu-latest
 
     steps:
@@ -14,20 +17,18 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: gh-pages
-          fetch-depth: 2  # pega o commit atual + o anterior
+          fetch-depth: 2  # commit atual + anterior
 
       - name: Identificar commit anterior
         id: prev
         run: |
           PREV=$(git rev-parse HEAD~1)
           echo "prev_commit=$PREV" >> $GITHUB_OUTPUT
-          echo "Commit anterior: $PREV"
 
-      - name: Reset para commit anterior
+      - name: Reset para o commit anterior
         run: |
           git reset --hard ${{ steps.prev.outputs.prev_commit }}
           git push origin gh-pages --force
 
-      - name: Finalizado
-        run: |
-          echo "Rollback feito com sucesso! Versão anterior restaurada."
+      - name: Rollback concluído
+        run: echo "Rollback restaurado com sucesso!"
