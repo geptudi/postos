@@ -1,0 +1,65 @@
+name: Deploy Flutter Web (WASM)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Instalar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Pub Get
+        run: flutter pub get
+
+      - name: Build Flutter Web (WASM)
+        run: flutter build web --wasm --release --base-href=/postos/
+
+      - name: Deploy para gh-pages
+        id: deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: build/web
+          clean: true
+
+      - name: Esperar GitHub Pages atualizar
+        run: sleep 15
+
+      - name: Testar se o site carregou
+        id: test
+        run: |
+          echo "Testando version.json..."
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/version.json)
+
+          if [ "$STATUS" != "200" ]; then
+            echo "ERRO: version.json não foi carregado."
+            exit 1
+          fi
+
+          echo "Testando main.dart.wasm..."
+          WASM_STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/main.dart.wasm)
+
+          if [ "$WASM_STATUS" != "200" ]; then
+            echo "ERRO: main.dart.wasm não está acessível."
+            exit 1
+          fi
+
+          echo "Site carregado com sucesso!"
+
+  rollback:
+    needs: build_and_deploy
+    if: failure()
+    uses: ./.github/workflows/rollback.yml
+    secrets: inherit
