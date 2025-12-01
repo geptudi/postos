@@ -8,25 +8,27 @@ permissions:
   actions: write
 
 jobs:
-  build_and_deploy:
+  deploy:
+    name: Build & Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout código
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Instalar Flutter
+      - name: Setup Flutter (exact version)
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: '3.38.3'   # <--- SUA VERSÃO LOCAL
+          cache: true
 
-      - name: Pub Get
+      - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Flutter Web (WASM)
+      - name: Build Web (WASM)
         run: flutter build web --wasm --release --base-href=/postos/
 
-      - name: Deploy para gh-pages
+      - name: Deploy to GitHub Pages
         id: deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -34,32 +36,33 @@ jobs:
           folder: build/web
           clean: true
 
-      - name: Esperar GitHub Pages atualizar
-        run: sleep 15
+      - name: Wait for GitHub Pages update
+        run: sleep 10
 
-      - name: Testar se o site carregou
-        id: test
+      - name: Test version.json
+        id: test_version
         run: |
-          echo "Testando version.json..."
           STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/version.json)
-
           if [ "$STATUS" != "200" ]; then
-            echo "ERRO: version.json não foi carregado."
+            echo "version.json FAILED ($STATUS)"
             exit 1
           fi
 
-          echo "Testando main.dart.wasm..."
-          WASM_STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/main.dart.wasm)
-
-          if [ "$WASM_STATUS" != "200" ]; then
-            echo "ERRO: main.dart.wasm não está acessível."
+      - name: Test WASM
+        id: test_wasm
+        run: |
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/main.dart.wasm)
+          if [ "$STATUS" != "200" ]; then
+            echo "main.dart.wasm FAILED ($STATUS)"
             exit 1
           fi
 
-          echo "Site carregado com sucesso!"
+      - name: Done
+        run: echo "Deploy OK!"
 
-  rollback:
-    needs: build_and_deploy
+  rollback_automatic:
+    name: Auto Rollback
+    needs: deploy
     if: failure()
     uses: ./.github/workflows/rollback.yml
     secrets: inherit
