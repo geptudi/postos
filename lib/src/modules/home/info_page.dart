@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import '../../models/parameters.dart';
 import 'home_controller.dart';
 import 'modelsview/single_selection_list.dart';
 import 'modelsview/template_page.dart';
@@ -13,9 +12,19 @@ class InfoPage extends StatefulWidget {
 }
 
 class _InfoPageState extends State<InfoPage> {
+  late final HomeController controller;
+
   @override
   void initState() {
     super.initState();
+
+    // Recupera controller
+    controller = Modular.get<HomeController>();
+
+    // Inicia carregamento:
+    // - JSON dos postos
+    // - Repositório remoto
+    controller.init();
   }
 
   @override
@@ -39,88 +48,116 @@ class _InfoPageState extends State<InfoPage> {
           ],
         ),
       ),
-      itens: (HomeController controller,
-              GlobalKey<FormFieldState<List<ValueNotifier<String>>>> state) =>
-          [
-        const Text(
-          textAlign: TextAlign.justify,
-          'Esta\tpágina\tvisa\tproporcionar\tum\tnatal\tcheio\tde\tmuito\tamor\te\tfraternidade.\n\nPara\tsaber\tmais\tcomo\tusar\testa\tferramenta,\tveja\to\tvideo\tabaixo:',
-          style: TextStyle(color: Colors.black, fontSize: 16.0),
-        ),
-        Center(
-          child: ElevatedButton.icon(
-            onPressed: () {
-             Modular.to.pushNamed("youtube");
-            },
-            icon: Icon(Icons.play_circle_filled,
-                color: Colors.red), // ou use um ícone SVG
-            label: Text('Vídeo explicativo'),
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.red,
-              backgroundColor: Colors.white,
-            ),
-          ),
-        ),
-        //player,
-        const Text(
-          textAlign: TextAlign.justify,
-          '\nPerfeito!!\tAgora\tescolha\to\tposto\tde\tassistência\tque\tdeseja\tajudar:\n',
-          style: TextStyle(color: Colors.black, fontSize: 16.0),
-        ),
-        SingleSelectionList(
-          answer: controller.activeTagButtom
-            ..addListener(() {
-              state.currentState!.didChange(
-                  <ValueNotifier<String>>[controller.activeTagButtom]);
-            }),
-          hasPrefiroNaoDizer: false,
-          options: const [
-            'Fabiano de Cristo',
-            'Eurípedes Barsanulfo',
-            'Mãe Zeferina',
-            'Simão Pedro',
-          ],
-          optionsColumnsSize: 1,
-        ),
-        const Text(
-          textAlign: TextAlign.justify,
-          '\nO\tposto\tescolhido\tfoi:\n',
-          style: TextStyle(color: Colors.black, fontSize: 15.0),
-        ),
-        ValueListenableBuilder(
-          valueListenable: controller.answerAux.value[0],
-          builder: (BuildContext context, String activeTag, Widget? child) =>
-              Column(
-            children: [
-              Text(
-                textAlign: TextAlign.center,
-                controller.activeTagButtom.value == ""
-                    ? ""
-                    : """
-Posto de Assistência Espírita ${controller.activeTagButtom.value} 
-${postos[controller.activeTagButtom.value]![0]}
-${postos[controller.activeTagButtom.value]![1]}
-${postos[controller.activeTagButtom.value]![2]}, e
-${postos[controller.activeTagButtom.value]![3]}
+      itens:
+          (
+            HomeController controller,
+            GlobalKey<FormFieldState<List<ValueNotifier<String>>>> state,
+          ) {
+            return [
+              const Text(
+                textAlign: TextAlign.justify,
+                'Esta página visa proporcionar um natal cheio de muito amor e fraternidade.\n\n'
+                'Para saber mais como usar esta ferramenta, veja o vídeo abaixo:',
+                style: TextStyle(color: Colors.black, fontSize: 16.0),
+              ),
+
+              Center(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Modular.to.pushNamed("youtube");
+                  },
+                  icon: const Icon(Icons.play_circle_filled, color: Colors.red),
+                  label: const Text('Vídeo explicativo'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.red,
+                    backgroundColor: Colors.white,
+                  ),
+                ),
+              ),
+
+              const Text(
+                textAlign: TextAlign.justify,
+                '\nPerfeito! Agora escolha o posto de assistência que deseja ajudar:\n',
+                style: TextStyle(color: Colors.black, fontSize: 16.0),
+              ),
+
+              /// Lista de postos – atualizada para usar activeTagButtom
+              SingleSelectionList(
+                answer: controller.activeTagButtom
+                  ..addListener(() {
+                    if (state.currentState != null) {
+                      state.currentState!.didChange(<ValueNotifier<String>>[
+                        controller.activeTagButtom,
+                      ]);
+                    }
+                  }),
+                hasPrefiroNaoDizer: false,
+                options: const [
+                  'Fabiano de Cristo',
+                  'Eurípedes Barsanulfo',
+                  'Mãe Zeferina',
+                  'Simão Pedro',
+                ],
+                optionsColumnsSize: 1,
+              ),
+
+              const Text(
+                textAlign: TextAlign.justify,
+                '\nO posto escolhido foi:\n',
+                style: TextStyle(color: Colors.black, fontSize: 15.0),
+              ),
+
+              /// Agora com PostoModel seguro
+              ValueListenableBuilder(
+                valueListenable: controller.activeTagButtom,
+                builder: (_, selectedTag, __) {
+                  if (selectedTag.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+
+                  final posto = controller.getPosto(selectedTag);
+
+                  return Column(
+                    children: [
+                      Text(
+                        textAlign: TextAlign.center,
+                        """
+Posto de Assistência Espírita $selectedTag
+
+${posto.endereco}
+${posto.bairro}
+
+${posto.coordenador1}, e
+${posto.coordenador2}
 """,
-                style: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                        style: const TextStyle(
+                          color: Colors.indigo,
+                          fontSize: 15.0,
+                        ),
+                      ),
+                      Text(
+                        posto.entrega,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 15.0,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
-              Text(
-                textAlign: TextAlign.center,
-                controller.activeTagButtom.value == ""
-                    ? ""
-                    : postos[controller.activeTagButtom.value]![4],
-                style: const TextStyle(color: Colors.red, fontSize: 15.0),
+
+              const Text(
+                textAlign: TextAlign.justify,
+                '\nSua generosidade faz a diferença na vida de quem mais precisa.\n\n'
+                'Junte-se a nós nessa causa e ajude a construir um natal melhor e recheado para todos.\n\n'
+                'Clique em "próximo" para continuar.\n\n'
+                'E que Deus lhe abençoe.\n\n',
+                style: TextStyle(color: Colors.black, fontSize: 15.0),
               ),
-            ],
-          ),
-        ),
-        const Text(
-          textAlign: TextAlign.justify,
-          '\nSua\tgenerosidade\tfaz\ta\tdiferença\tna\tvida\tde\tquem\tmais\tprecisa.\n\nJunte-se\ta\tnós\tnessa\tcausa\te\tajude\ta\tconstruir\tum\tnatal\tmelhor\te\trecheado\tpara\ttodos.\n\nClique\tem\tpróximo\tpara\tcontinuar.\n\nE\tque\tDeus\tlhe\tabençõe.\n\n',
-          style: TextStyle(color: Colors.black, fontSize: 15.0),
-        ),
-      ],
+            ];
+          },
     );
   }
 

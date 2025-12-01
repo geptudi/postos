@@ -20,7 +20,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.38.3'
-          cache: false      # ⚠️ DESLIGAR CACHE - ESSENCIAL
+          cache: true   # aqui pode deixar true, não estamos mais hackeando nada
 
       - name: Install dependencies
         run: flutter pub get
@@ -28,17 +28,10 @@ jobs:
       - name: Build Web (WASM)
         run: flutter build web --wasm --release --base-href=/postos/
 
-      # GERAR VERSIONAMENTO (IGNORADO ANTES!)
+      # opcional, mas seguro: um version.json simples
       - name: Generate version.json
         run: |
           echo "{\"version\": \"$(date +%s)\"}" > build/web/version.json
-          echo "VERSION=$(date +%s)"
-
-      # INVALIDAR CACHE DE JS, MJS E WASM
-      - name: Append version hash to JS/MJS/WASM
-        run: |
-          find build/web -type f -name "*.js" -exec sed -i "s/main.dart.wasm/main.dart.wasm?v=$(date +%s)/g" {} +
-          find build/web -type f -name "*.mjs" -exec sed -i "s/main.dart.wasm/main.dart.wasm?v=$(date +%s)/g" {} +
 
       - name: Deploy to GitHub Pages
         id: deploy
@@ -54,9 +47,7 @@ jobs:
       - name: Test version.json
         id: test_version
         run: |
-          URL="https://geptudi.github.io/postos/version.json"
-          echo "Testando $URL"
-          STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL?v=$(date +%s)")
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/version.json)
           if [ "$STATUS" != "200" ]; then
             echo "version.json FAILED ($STATUS)"
             exit 1
@@ -65,8 +56,7 @@ jobs:
       - name: Test WASM
         id: test_wasm
         run: |
-          URL="https://geptudi.github.io/postos/main.dart.wasm"
-          STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL?v=$(date +%s)")
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://geptudi.github.io/postos/main.dart.wasm)
           if [ "$STATUS" != "200" ]; then
             echo "main.dart.wasm FAILED ($STATUS)"
             exit 1
